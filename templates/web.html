@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html ng-app="tripStoryApp" ng-controller="MainController as mainCtr">
+<head>
+    <title>TripStory</title>
+    <meta name="viewport" content="width=520, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <!-- Fontawesome css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+    <!-- Custom css -->
+    <link rel="stylesheet" href="/static/css/style.css">
+
+</head>
+<body>
+    <!-- Fixed navbar -->
+    <div ng-show="$root.loggedIn" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#dashboard">TripStory</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ng-class="{active: isActive('/dashboard') }"><a href="#dashboard">Home</a></li>
+            <li ng-class="{active: isActive('/about') }"><a href="#about">About</a></li>
+          </ul>
+          <div class="nav navbar-nav navbar-text navbar-right">
+            Hi {{$root.user.username}} <a ng-click="mainCtr.logout()" href >Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div ng-view></div>
+
+   <!-- JQuery + Angular -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-resource.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-sanitize.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/service.js"></script>
+    <script src="/static/js/login/login.js"></script>
+    <script src="/static/js/register/register.js"></script>
+    <script src="/static/js/dashboard/dashboard.js"></script>
+</body>
+</html>
+

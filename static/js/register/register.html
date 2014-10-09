@@ -1,0 +1,24 @@
+    <div class="container">
+
+      <form class="form-signin" name="signinForm" role="form" ng-controller="RegisterController as registerCtr" novalidate>
+        <h2 class="form-signin-heading">Super Quick Sign-up</h2>
+        <div ng-show="errors" class="alert alert-danger" >
+          <ul class="error" ng-repeat="error in errors">
+            <li class="error">{{ error }}</li>
+          </ul>
+        </div>
+
+
+        <input type="text" class="form-control form-signin-top" placeholder="Username"
+            ng-model="user.username" required ng-minlength="3" ng-maxlength="10" autofocus>
+        <input type="email" class="form-control form-signin-middle" placeholder="Email address"
+            ng-model="user.email" required>
+        <input type="password" class="form-control form-signin-bottom" placeholder="Password"
+            ng-model="user.password" ng-minlength="4" ng-maxlength="16" required>
+
+        <button class="btn btn-lg btn-primary btn-block" ng-click="signinForm.$valid && registerCtr.signIn(user)">Sign up</button>
+        <a href='#/login'>Already a member? Sign in!</a>
+      </form>
+
+
+    </div> <!-- /container -->

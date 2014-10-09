@@ -1,0 +1,23 @@
+    <div class="container">
+
+      <form name="signupForm" class="form-signin" role="form" ng-controller="LoginController as loginCtr" novalidate>
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <div ng-show="errors" class="alert alert-danger" >
+          <ul class="error" ng-repeat="error in errors">
+            <li class="error">{{ error }}</li>
+          </ul>
+        </div>
+        <div ng-show="registered" class="alert alert-success">Congratulations {{registered}}! You can sign in now.</div>
+        <input type="text" class="form-control form-signin-top" placeholder="Username or Email address"
+            ng-model="user.email" required autofocus>
+        <input type="password" class="form-control form-signin-bottom" placeholder="Password"
+            ng-model="user.password" required>
+        <label class="checkbox">
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+        <button class="btn btn-lg btn-primary btn-block" ng-click="signupForm.$valid && loginCtr.signUp(user)">Sign in</button>
+        <a href='#/register'>Not a member yet? Sign up!</a>
+      </form>
+
+
+    </div> <!-- /container -->
