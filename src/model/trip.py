@@ -12,17 +12,22 @@ class Trip:
     def create(user, payload):
 
         obj = model.Trip()
-        obj.user = ndb.Key(model.User, str(user))
+        obj.user = user.key
         obj.name = payload['name']
         obj.locations = payload['locations']
         obj.put()
         return obj
+
+    @staticmethod
+    def get_by_user(user):
+        return model.Trip.query(model.Trip.user == user.key).order(-model.Trip.created)
 
 
 
     @staticmethod
     def as_dict(obj):
         return {
+            'id': obj.key.id(),
             'name': obj.name,
             'created': obj.created.isoformat(),
             'locations': obj.locations

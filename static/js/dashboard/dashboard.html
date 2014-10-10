@@ -1,16 +1,62 @@
+
+    <ng-include src="'/static/js/includes/gallery.html'"></ng-include>
+
+    <div class="jumbotron jumbotron-ad hidden-print">
+      <div class="container">
+        <p>{{$root.user.username}}, you're an explorer. Check it out!</p>
+      </div>
+    </div>
     <div class="container" ng-controller="DashboardController as dashboardCtr">
-        <h1>Dashboard</h1>
+        <div class="row" ng-repeat="trip in trips" my-repeat-directive>
+            <hr />
+            <div class="container">
+                <h3><i class="fa fa-user"> </i><span style="margin-left:5px;"
+                    ng-bind="trip.user.username"></span></h3>
+                <p ng-bind="dashboardCtr.convertToDate(trip.created) | date:'MMMM d, y h:mm a'"></p>
+            </div>
+            <div class="col-sm-6">
+                <div id="map{{$index}}" ></div>
+                <blockquote ng-show="{{trip.name}}">
+                <p>{{trip.name}}</p>
+                </blockquote>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="left-column">
+                        <p class="trip-description" ng-bind="description{{$index}}"></p>
+                    </div>
 
-        <h2>Hi, {{ user.username }}!</h2>
+                    <div ng-show="dashboardCtr.hasImage($index, 0)" class="col-sm-4">
+                        <a href="{{ dashboardCtr.showImage($index, 0) }}" data-gallery>
+                        <img
+                            ng-src="{{ dashboardCtr.showImage($index, 0) }}"
+                            class="img-thumbnail">
+                        </a>
+                    </div>
+                    <div ng-show="dashboardCtr.hasImage({{$index}}, 1)" class="col-sm-4" >
+                        <a href="{{ dashboardCtr.showImage($index, 1) }}" data-gallery>
+                        <img
+                            ng-src="{{ dashboardCtr.showImage($index, 1) }}"
+                            class="img-thumbnail">
+                        </a>
+                    </div>
+                    <div ng-show="dashboardCtr.hasImage({{$index}}, 2)" class="col-sm-4" >
+                        <a href="{{ dashboardCtr.showImage($index, 2) }}" data-gallery>
+                        <img
+                            ng-src="{{ dashboardCtr.showImage($index, 2) }}"
+                            class="img-thumbnail">
+                        </a>
+                    </div>
 
-        <table class="table"table-hover>
-            <thead>
-                <tr><td>Name</td><td>State</td><td>Location</td></tr>
-            </thead>
-            <tbody ng-repeat="server in servers">
-                <tr><td>{{server.name}}</td><td>{{server.state}}</td><td>{{server.location}}</td></tr>
-            </tbody>
-        <table>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
 
 
     </div> <!-- /container -->

@@ -84,7 +84,7 @@ li.error {
 @import "bower_components/angular-upload/src/directives/btnUpload.less";
 
 
-#map {
+div[id^='map'] {
     height:420px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -92,10 +92,16 @@ li.error {
 }
 
 div.left-column {
-    height:200px;
-    margin-top: 5px;
+    height:190px;
 
 }
+
+p.trip-description {
+
+    margin-top: 15px;
+    font-size: 18px;
+}
+
 .btn-custom, .btn-custom:hover {
   background-color: #1d9d74;
   border-color: #1d9d74;
@@ -140,4 +146,10 @@ div.left-column {
   .jumbotron .h1 {
     font-size: 63px;
   }
+}
+
+hr {
+    display: block; height: 1px;
+    border: 0; border-top: 1.5px solid #ccc;
+    margin: 1em 0; padding: 0;
 }

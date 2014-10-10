@@ -111,7 +111,7 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
         $scope.currentPosition = data.length-1;
 
-        google.maps.event.addListener(fixedMarker, 'click', (function(m, me) {
+        google.maps.event.addListener(fixedMarker, 'click', (function(m) {
           return function() {
             var poi = null;
             var position = -1;
@@ -134,7 +134,7 @@ angular.module('tripStoryApp.map', ['ngRoute'])
             $scope.currentPosition = position;
             $scope.$apply();
           };
-        })(fixedMarker, this));
+        })(fixedMarker));
       }
 
     };

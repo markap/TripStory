@@ -15,7 +15,7 @@ actions = [
     ('/api/user/session', usercontroller.UserSessionHandler),
     ('/api/user/logout', usercontroller.UserLogoutHandler),
 
-    ('/api/dashboard', dashboardcontroller.Dashboardandler),
+    ('/api/dashboard', dashboardcontroller.DashboardHandler),
 
     ('/api/map/save', mapcontroller.SaveHandler),
     ('/api/map/upload', mapcontroller.ImageUploadHandler),
