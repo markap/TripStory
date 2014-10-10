@@ -16,6 +16,7 @@ angular.module('tripStoryApp.map', ['ngRoute'])
     var data = [];
     $scope.currentPosition = -1;
     $scope.trip = {
+      name: '',
       description: ''
     };
 
@@ -203,6 +204,34 @@ angular.module('tripStoryApp.map', ['ngRoute'])
     this.updateDescription = function(trip) {
       data[$scope.currentPosition].description = trip.description;
 
+    };
+
+    this.showSaveTripButton = function() {
+      return data.length > 0;
+    };
+
+    this.saveTrip = function(name) {
+      console.log(name);
+      console.log(data);
+      var trip = {
+        'name': name,
+        'locations': []
+      };
+
+      for (var i = 0; i < data.length; i++) {
+        var location = {
+          'description': data[i].description,
+          'lat': data[i]['marker'].position.lat(),
+          'lng': data[i]['marker'].position.lng(),
+          'images': data[i]['images']
+        };
+        trip.locations.push(location);
+      }
+      Backend.mapService().save(trip, function(data) {
+        $location.path('dashboard');
+      }, function(err) {
+        console.log(err);
+      });
     };
 
 }]);

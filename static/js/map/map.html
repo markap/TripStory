@@ -14,6 +14,14 @@
                             ng-model="trip.name" required autofocus>
                         <div id="map"></div>
 
+                        <button
+                            class="btn btn-lg btn-custom"
+                            ng-show="mapCtr.showSaveTripButton()"
+                            ng-click="mapCtr.saveTrip(trip.name)">
+                            <span class="glyphicon glyphicon-ok-sign"></span>
+                            Save your trip
+                        </button>
+
                 </div>
                 <div class="col-sm-6">
                   <div class="left-column">
@@ -26,7 +34,7 @@
                         class="btn btn-custom"
                         ng-show="mapCtr.showSaveButton()"
                         ng-click="mapCtr.saveLocation(trip)">
-                        <span class="glyphicon glyphicon-ok-sign"></span>
+                        <span class="glyphicon glyphicon-pushpin"></span>
                         Pin this location</button>
 
 

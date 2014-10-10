@@ -17,6 +17,7 @@ actions = [
 
     ('/api/dashboard', dashboardcontroller.Dashboardandler),
 
+    ('/api/map/save', mapcontroller.SaveHandler),
     ('/api/map/upload', mapcontroller.ImageUploadHandler),
 
     ('/api/img/(.*)', imagehandler.ServeHandler)

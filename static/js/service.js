@@ -77,5 +77,22 @@ backendServices.factory('Backend', ['$resource',
             }
         };
     };
+
+    service.mapService = function() {
+      return {
+        save: function(trip, success, failure) {
+          return $resource('/api/map/save').save(trip, function(data) {
+                if (data.hasOwnProperty('errors')) {
+
+                    failure(data.errors);
+
+                } else {
+
+                    success(data);
+                }
+          });
+        }
+      };
+    };
     return service;
   }]);
