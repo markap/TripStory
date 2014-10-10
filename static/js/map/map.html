@@ -1,24 +1,89 @@
+    <ng-include src="'/static/js/includes/gallery.html'"></ng-include>
+
+    <div class="jumbotron jumbotron-ad hidden-print">
+      <div class="container">
+        <p>Pin your awesome travel experience</p>
+      </div>
+    </div>
     <div class="container">
-        <h1>Map</h1>
 
         <form role="form" ng-controller="MapController as mapCtr" novalidate>
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-6">
                         <input type="text" class="form-control" placeholder="Describe your trip"
                             ng-model="trip.name" required autofocus>
                         <div id="map"></div>
 
                 </div>
-                <div class="col-sm-4">
-                    <textarea class="form-control" rows="4" ng-model="trip.description"
+                <div class="col-sm-6">
+                  <div class="left-column">
+                    <textarea ng-show="mapCtr.showDeleteButton()"
+                        style="margin-bottom:5px"
+                        ng-change="mapCtr.updateDescription(trip)"
+                        class="form-control" rows="4" ng-model="trip.description"
                         placeholder="Describe this location"></textarea>
-                    <button type="form-control button" class="btn btn-primary"
+                    <button type="from-control button"
+                        class="btn btn-custom"
                         ng-show="mapCtr.showSaveButton()"
-                        ng-click="mapCtr.saveLocation(trip)">Add new location</button>
-                    <button type="form-control button" class="btn btn-primary"
-                        ng-show="mapCtr.showDeleteButton()"
-                        ng-click="mapCtr.deleteLocation()">Remove location</button>
+                        ng-click="mapCtr.saveLocation(trip)">
+                        <span class="glyphicon glyphicon-ok-sign"></span>
+                        Pin this location</button>
+
+
+
+                        <button
+                          ng-show="mapCtr.showDeleteButton()"
+                          class="btn btn-custom btn-upload"
+                          upload-button
+                          id="img-upload-button"
+                          url="/api/map/upload"
+                          on-error="mapCtr.onImageUploadError(response)"
+                          on-success="mapCtr.onImageUploadSuccess(response)">
+                          Add photos to your destination
+                        </button>
+
+                        <button type="form-control button"
+                            class="btn btn-custom"
+                            ng-show="mapCtr.showDeleteButton()"
+                            ng-click="mapCtr.deleteLocation()">
+
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+
+                  </div>
+                  <div class="left-column">
+
+
+
+                    <div class="row">
+                        <div ng-show="mapCtr.hasImage(0)" class="col-sm-4">
+                            <a ng-show="mapCtr.hasImage(0)" href="{{mapCtr.showImage(0)}}" data-gallery>
+                            <img
+                                ng-src="{{mapCtr.showImage(0)}}"
+                                class="img-thumbnail">
+                            </a>
+                        </div>
+                        <div ng-show="mapCtr.hasImage(1)" class="col-sm-4" >
+                            <a ng-show="mapCtr.hasImage(1)" href="{{mapCtr.showImage(1)}}" data-gallery>
+                            <img
+                                ng-src="{{mapCtr.showImage(1)}}"
+                                class="img-thumbnail">
+                            </a>
+                        </div>
+                        <div ng-show="mapCtr.hasImage(2)" class="col-sm-4" >
+                            <a ng-show="mapCtr.hasImage(2)" href="{{mapCtr.showImage(2)}}" data-gallery>
+                            <img
+                                ng-src="{{mapCtr.showImage(2)}}"
+                                class="img-thumbnail">
+                            </a>
+                        </div>
+
+                    </div>
+
+                  </div>
                 </div>
             </div>
         </form>
+
+
     </div> <!-- /container -->

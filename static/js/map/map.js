@@ -92,6 +92,7 @@ angular.module('tripStoryApp.map', ['ngRoute'])
           map: map,
           id: data.length
         });
+        currentMarker = null;
 
         // calculate route btw new and previous marker
         if (data.length > 0) {
@@ -102,7 +103,8 @@ angular.module('tripStoryApp.map', ['ngRoute'])
         }
         data.push({
           'marker': fixedMarker,
-          'description': trip.description
+          'description': trip.description,
+          'images': []
         });
 
 
@@ -121,6 +123,12 @@ angular.module('tripStoryApp.map', ['ngRoute'])
                   break;
               }
             }
+
+            if (currentMarker) {
+                currentMarker.setMap(null);
+                currentMarker = null;
+            };
+
             $scope.trip.description = poi['description'];
             $scope.currentPosition = position;
             $scope.$apply();
@@ -167,5 +175,34 @@ angular.module('tripStoryApp.map', ['ngRoute'])
       return currentMarker !== null;
     };
 
+    this.onImageUploadSuccess = function(response) {
+      data[$scope.currentPosition].images.push(response.data.key);
+    };
+
+    this.onImageUploadError = function(err) {
+      console.log("erro");
+      console.log(err);
+    };
+
+    this.hasImage = function(index) {
+      console.log("has image at index " + index);
+      return $scope.currentPosition in data
+        && index in data[$scope.currentPosition].images;
+    };
+
+    this.showImage = function(index) {
+      console.log('show image func for index ' + index);
+      console.log(this.hasImage(index));
+      if (!this.hasImage(index)) {
+          return;
+      }
+      console.log("/api/img/" + data[$scope.currentPosition].images[index]);
+      return "/api/img/" + data[$scope.currentPosition].images[index];
+    };
+
+    this.updateDescription = function(trip) {
+      data[$scope.currentPosition].description = trip.description;
+
+    };
 
 }]);

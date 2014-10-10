@@ -3,7 +3,8 @@
 
 import webapp2
 
-from src.controller import webcontroller, usercontroller, dashboardcontroller
+from src.controller import webcontroller, usercontroller, dashboardcontroller,\
+    mapcontroller, imagehandler
 
 actions = [
 
@@ -14,7 +15,11 @@ actions = [
     ('/api/user/session', usercontroller.UserSessionHandler),
     ('/api/user/logout', usercontroller.UserLogoutHandler),
 
-    ('/api/dashboard', dashboardcontroller.Dashboardandler)
+    ('/api/dashboard', dashboardcontroller.Dashboardandler),
+
+    ('/api/map/upload', mapcontroller.ImageUploadHandler),
+
+    ('/api/img/(.*)', imagehandler.ServeHandler)
 
 
 

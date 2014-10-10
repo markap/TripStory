@@ -6,7 +6,7 @@ body {
 .theme-dropdown .dropdown-menu {
   position: static;
   display: block;
-  margin-bottom: 20px;
+
 }
 
 .theme-showcase > p > .btn {
@@ -16,6 +16,7 @@ body {
 .theme-showcase .navbar .container {
   width: auto;
 }
+
 
 
 .form-signin {
@@ -80,8 +81,62 @@ li.error {
   padding: 0;
 }
 
+@import "bower_components/angular-upload/src/directives/btnUpload.less";
+
+
 #map {
     height:420px;
     margin-top: 5px;
 
+}
+
+div.left-column {
+    height:200px;
+    margin-top: 5px;
+
+}
+.btn-custom, .btn-custom:hover {
+  background-color: #1d9d74;
+  border-color: #1d9d74;
+  color: #ffffff;
+}
+
+.jumbotron {
+  margin-top:-20px;
+  padding: 15px;
+  margin-bottom: 15px;
+  color: #ffffff;
+  background-color: #1d9d74;
+}
+.jumbotron h1,
+.jumbotron .h1 {
+  color: inherit;
+}
+.jumbotron p {
+  margin-bottom: 15px;
+  font-size: 21px;
+  font-weight: 200;
+}
+.jumbotron > hr {
+  border-top-color: #157254;
+}
+.container .jumbotron {
+  border-radius: 6px;
+}
+.jumbotron .container {
+  max-width: 100%;
+}
+@media screen and (min-width: 768px) {
+  .jumbotron {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .container .jumbotron {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+  .jumbotron h1,
+  .jumbotron .h1 {
+    font-size: 63px;
+  }
 }

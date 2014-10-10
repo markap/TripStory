@@ -5,6 +5,7 @@ var tripStoryApp = angular.module('tripStoryApp', [
   'ngRoute',
   'ngSanitize',
   'backendServices',
+  'lr.upload',
   'tripStoryApp.login',
   'tripStoryApp.register',
   'tripStoryApp.dashboard',
@@ -15,7 +16,7 @@ tripStoryApp.config(['$routeProvider',
         function($routeProvider) {
 
     $routeProvider.when('/about', {
-        templateUrl: '/static/js/about/about.html',
+        templateUrl: '/static/js/includes/about.html',
 
     });
     $routeProvider.otherwise({redirectTo: '/dashboard'});
