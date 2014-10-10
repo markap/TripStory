@@ -7,7 +7,8 @@ var tripStoryApp = angular.module('tripStoryApp', [
   'backendServices',
   'tripStoryApp.login',
   'tripStoryApp.register',
-  'tripStoryApp.dashboard'
+  'tripStoryApp.dashboard',
+  'tripStoryApp.map'
 ]);
 
 tripStoryApp.config(['$routeProvider',

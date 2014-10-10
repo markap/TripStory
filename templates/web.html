@@ -31,6 +31,7 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li ng-class="{active: isActive('/dashboard') }"><a href="#dashboard">Home</a></li>
+            <li ng-class="{active: isActive('/map') }"><a href="#map">Map</a></li>
             <li ng-class="{active: isActive('/about') }"><a href="#about">About</a></li>
           </ul>
           <div class="nav navbar-nav navbar-text navbar-right">
@@ -49,12 +50,14 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-resource.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-sanitize.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
     <script src="/static/js/app.js"></script>
     <script src="/static/js/service.js"></script>
     <script src="/static/js/login/login.js"></script>
     <script src="/static/js/register/register.js"></script>
     <script src="/static/js/dashboard/dashboard.js"></script>
+    <script src="/static/js/map/map.js"></script>
 </body>
 </html>
 

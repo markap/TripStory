@@ -1,0 +1,24 @@
+    <div class="container">
+        <h1>Map</h1>
+
+        <form role="form" ng-controller="MapController as mapCtr" novalidate>
+            <div class="row">
+                <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Describe your trip"
+                            ng-model="trip.name" required autofocus>
+                        <div id="map"></div>
+
+                </div>
+                <div class="col-sm-4">
+                    <textarea class="form-control" rows="4" ng-model="trip.description"
+                        placeholder="Describe this location"></textarea>
+                    <button type="form-control button" class="btn btn-primary"
+                        ng-show="mapCtr.showSaveButton()"
+                        ng-click="mapCtr.saveLocation(trip)">Add new location</button>
+                    <button type="form-control button" class="btn btn-primary"
+                        ng-show="mapCtr.showDeleteButton()"
+                        ng-click="mapCtr.deleteLocation()">Remove location</button>
+                </div>
+            </div>
+        </form>
+    </div> <!-- /container -->
