@@ -16,6 +16,7 @@ actions = [
     ('/api/user/logout', usercontroller.UserLogoutHandler),
 
     ('/api/dashboard', dashboardcontroller.DashboardHandler),
+    ('/api/dashboard/details', dashboardcontroller.DetailsHandler),
     ('/api/profile', dashboardcontroller.UserHandler),
     ('/api/share', dashboardcontroller.ShareHandler),
 

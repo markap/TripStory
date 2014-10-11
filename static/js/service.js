@@ -113,6 +113,17 @@ backendServices.factory('Backend', ['$resource',
                         success(data);
                     }
                 });
+            },
+            getDetails: function(tripId, success, failure) {
+                return $resource('/api/dashboard/details').save({'tripid': tripId}, function(data) {
+                    if (data.hasOwnProperty('errors')) {
+                        failure(data.errors);
+
+                    } else {
+                        console.log(data);
+                        success(data);
+                    }
+                });
             }
         };
     };

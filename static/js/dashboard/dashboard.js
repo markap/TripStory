@@ -66,6 +66,17 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
         console.log(err);
       });
 
+    } else if ($location.path().indexOf('/details') === 0) {
+
+
+      Backend.dashboardService().getDetails($routeParams.tripId, function(data) {
+        $scope.trips = data.trips;
+
+        $scope.populateMap(data);
+      },
+      function(err) {
+        console.log(err);
+      });
     }
 
 
@@ -287,5 +298,10 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
     this.showProfileCreateStory = function() {
       return $location.path() === '/profile' && $scope.trips.length === 0;
+    };
+
+
+    this.showMap = function() {
+      $location.path('explore');
     };
 }]);

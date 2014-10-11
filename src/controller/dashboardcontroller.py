@@ -37,6 +37,22 @@ class DashboardHandler(basecontroller.BaseHandler):
         }
 
 
+class DetailsHandler(basecontroller.BaseHandler):
+    @decorator.json_out
+    @decorator.auth
+    def post(self):
+        payload = json.loads(self.request.body)
+
+        trip_obj = trip.Trip.get_by_id(payload['tripid'])
+        trip_data = trip.Trip.as_dict(trip_obj)
+
+        trip_data['user'] = user.User.as_dict(trip_obj.user.get())
+
+        return {
+            'trips': [trip_data]
+        }
+
+
 class UserHandler(basecontroller.BaseHandler):
     @decorator.json_out
     @decorator.auth
