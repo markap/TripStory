@@ -6,15 +6,55 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
   $routeProvider.when('/dashboard', {
     templateUrl: '/static/js/dashboard/dashboard.html',
-    controller: 'DashboardController'
+    controller: 'DashboardController as dashboardCtr'
   });
 }])
 
 
-.controller('DashboardController', ['$scope', '$location', 'Backend', '$rootScope', '$sce',
-        function($scope, $location, Backend, $rootScope, $sce) {
+.controller('DashboardController', ['$scope', '$location', 'Backend', '$rootScope',
+        '$sce', '$routeParams',
+        function($scope, $location, Backend, $rootScope, $sce, $routeParams) {
 
     $scope.trips = [];
+
+    console.log('template url');
+    console.log($location);
+    if ($location.path() === '/dashboard') {
+      Backend.dashboardService().get(function(data) {
+        $scope.trips = data.trips;
+
+        $scope.populateMap(data);
+      },
+      function(err) {
+        console.log(err);
+      });
+
+    } else if ($location.path().indexOf('/hashtag') === 0) {
+      $scope.hashtag = $routeParams.hashtag;
+
+      Backend.dashboardService().getForHashtag($scope.hashtag, function(data) {
+        $scope.trips = data.trips;
+        $scope.populateMap(data);
+      },
+      function(err) {
+        console.log(err);
+      });
+
+    } else if ($location.path().indexOf('/profile') === 0) {
+
+      var userId = $routeParams.userId ? $routeParams.userId : null;
+
+      Backend.dashboardService().getForUser(userId, function(data) {
+        $scope.trips = data.trips;
+        $scope.profile = data.user;
+
+        $scope.populateMap(data);
+      },
+      function(err) {
+        console.log(err);
+      });
+    }
+
 
 
     var directionsService = new google.maps.DirectionsService();
@@ -46,9 +86,43 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
     };
 
 
-    Backend.dashboardService().get(function(data) {
-        $scope.trips = data.trips;
 
+    this.hasImage = function(mapId, imageId) {
+      console.log('hasImage ' + mapId + ' ' + imageId);
+      return mapId in $scope.trips &&
+                'position' in $scope.trips[mapId] &&
+                imageId in $scope.trips[mapId]['locations'][$scope.trips[mapId]['position']]['images']
+    };
+
+    this.showImage = function(mapId, imageId) {
+      if (!this.hasImage(mapId, imageId)) {
+        return;
+      }
+      return '/api/img/' + $scope.trips[mapId]['locations'][$scope.trips[mapId]['position']]['images'][imageId]
+    };
+
+    this.convertToDate = function(date) {
+      return new Date(date);
+    };
+
+    this.hashTagUrl = function(words) {
+
+      var wordsArr = words.split(' ');
+      var outArr = [];
+
+      $.each(wordsArr,function(i,val){
+        if(val.indexOf('#') === 0) {
+          val = "<a href='#hashtag/" + val.replace(/#/g, '') + "'>" + val + "</a>";
+
+        }
+        outArr.push(val);
+      });
+
+      return $sce.trustAsHtml(outArr.join(' '));
+    };
+
+
+    $scope.populateMap = function(data) {
         var mapOptions = {
             zoom: 4,
             center: new google.maps.LatLng(40.0000, -98.0000),
@@ -106,46 +180,6 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
         }, 50);
 
-
-
-
-    },
-    function(err) {
-      console.log(err);
-    });
-
-    this.hasImage = function(mapId, imageId) {
-      console.log('hasImage ' + mapId + ' ' + imageId);
-      return mapId in $scope.trips &&
-                'position' in $scope.trips[mapId] &&
-                imageId in $scope.trips[mapId]['locations'][$scope.trips[mapId]['position']]['images']
-    };
-
-    this.showImage = function(mapId, imageId) {
-      if (!this.hasImage(mapId, imageId)) {
-        return;
-      }
-      return '/api/img/' + $scope.trips[mapId]['locations'][$scope.trips[mapId]['position']]['images'][imageId]
-    };
-
-    this.convertToDate = function(date) {
-      return new Date(date);
-    };
-
-    this.hashTagUrl = function(words) {
-
-      var wordsArr = words.split(' ');
-      var outArr = [];
-
-      $.each(wordsArr,function(i,val){
-        if(val.indexOf('#') === 0) {
-          val = "<a href='#hashtag/" + val.replace(/#/g, '') + "'>" + val + "</a>";
-
-        }
-        outArr.push(val);
-      });
-
-      return $sce.trustAsHtml(outArr.join(' '));
     };
 
 
