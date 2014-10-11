@@ -20,7 +20,8 @@
 </head>
 <body>
     <!-- Fixed navbar -->
-    <div ng-show="$root.loggedIn" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div ng-show="mainCtr.showNavbar()"
+        class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -38,7 +39,7 @@
             <li ng-class="{active: isActive('/profile') }"><a href="#profile">My Profile</a></li>
             <li ng-class="{active: isActive('/about') }"><a href="#about">About</a></li>
           </ul>
-          <div class="nav navbar-nav navbar-text navbar-right">
+          <div ng-show="$root.loggedIn" class="nav navbar-nav navbar-text navbar-right">
             Hi {{$root.user.username}} <a ng-click="mainCtr.logout()" href >Logout</a>
           </div>
         </div>
@@ -68,6 +69,8 @@
     <script src="/static/js/map/map.js"></script>
     <script src="/static/js/hashtag/hashtag.js"></script>
     <script src="/static/js/profile/profile.js"></script>
+    <script src="/static/js/share/share.js"></script>
+
 </body>
 </html>
 

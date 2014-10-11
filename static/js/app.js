@@ -12,7 +12,8 @@ var tripStoryApp = angular.module('tripStoryApp', [
   'tripStoryApp.dashboard',
   'tripStoryApp.map',
   'tripStoryApp.hashtag',
-  'tripStoryApp.profile'
+  'tripStoryApp.profile',
+  'tripStoryApp.share'
 ]);
 
 tripStoryApp.config(['$routeProvider',
@@ -28,19 +29,54 @@ tripStoryApp.config(['$routeProvider',
 tripStoryApp.controller('MainController', ['$rootScope', '$location', 'Backend',
     '$scope', function($rootScope, $location, Backend, $scope) {
 
+     $rootScope.loggedIn = false;
+
       $scope.isActive = function(route) {
         return route === $location.path();
-      }
+      };
 
-      // check with service
-      Backend.userService().loggedIn(function(user) {
-        $rootScope.loggedIn = true;
-        $rootScope.user = user;
-      },
-      function(error) {
 
-        $location.path('login');
+
+      $scope.noLoginNecessary = function(path) {
+
+        return path.indexOf('/share') === 0 ||
+            path.indexOf('/register') === 0 ||
+            path.indexOf('/login') === 0;
+      };
+
+      $scope.$on('$locationChangeStart', function(event) {
+        var path = $location.path();
+        if (!$rootScope.loggedIn && !$scope.noLoginNecessary(path)) {
+            $location.path('login');
+        }
+
       });
+
+      this.showNavbar = function() {
+
+        if ($rootScope.loggedIn ||
+           $scope.noLoginNecessary($location.path())) {
+            // stupid
+
+         } else {
+
+           $location.path('login');
+         }
+         return $rootScope.loggedIn ||
+            $location.path().indexOf('/share') === 0;
+      };
+
+      if (!$scope.noLoginNecessary($location.path())) {
+          // check with service
+          Backend.userService().loggedIn(function(user) {
+            $rootScope.loggedIn = true;
+            $rootScope.user = user;
+          },
+          function(error) {
+
+            $location.path('login');
+          });
+      }
 
       this.logout = function() {
 

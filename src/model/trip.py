@@ -59,3 +59,15 @@ class Trip:
             'likes': obj.likes
 
         }
+
+    @staticmethod
+    def as_share_dict(obj):
+        return {
+            'id': obj.key.id(),
+            'name': obj.name,
+            'created': obj.created.isoformat(),
+            'locations': obj.locations
+
+        }
+
+

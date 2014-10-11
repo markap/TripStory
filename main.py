@@ -17,6 +17,7 @@ actions = [
 
     ('/api/dashboard', dashboardcontroller.DashboardHandler),
     ('/api/profile', dashboardcontroller.UserHandler),
+    ('/api/share', dashboardcontroller.ShareHandler),
 
     ('/api/search', searchcontroller.HashtagSearchHandler),
 

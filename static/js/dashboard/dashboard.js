@@ -53,6 +53,19 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
       function(err) {
         console.log(err);
       });
+
+    } else if ($location.path().indexOf('/share') === 0) {
+
+      $rootScope.loggedIn = false;
+      Backend.dashboardService().getForShare($routeParams.shareId, function(data) {
+        $scope.trips = data.trips;
+
+        $scope.populateMap(data);
+      },
+      function(err) {
+        console.log(err);
+      });
+
     }
 
 
@@ -185,8 +198,8 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
     $scope.displayLocationDeletePopup = [];
 
-    this.isMyStory = function(user) {;
-      return user.id === $rootScope.user.id;
+    this.isMyStory = function(user) {
+      return $rootScope.loggedIn && user.id === $rootScope.user.id;
     };
 
     this.showDeleteLocationPopup = function(show, alertId) {
@@ -250,5 +263,10 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
         html.push('<a href="#profile/' + likeId + '">' + likes[likeId] + '</a>');
       }
       return html.join(", ");
+    };
+
+
+    this.showShareUrl = function(index) {
+      return '<a target="blank" href="#share/' + $scope.trips[index]['id'] + '"> Share this story</a>';
     };
 }]);

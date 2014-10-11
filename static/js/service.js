@@ -102,6 +102,17 @@ backendServices.factory('Backend', ['$resource',
                         success(data);
                     }
                 });
+            },
+            getForShare: function(shareId, success, failure) {
+                return $resource('/api/share').save({'shareid': shareId}, function(data) {
+                    if (data.hasOwnProperty('errors')) {
+                        failure(data.errors);
+
+                    } else {
+                        console.log(data);
+                        success(data);
+                    }
+                });
             }
         };
     };

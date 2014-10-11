@@ -22,10 +22,14 @@
                         class="pull-right glyphicon glyphicon-remove"></span>
 
 
-                    <h3 ng-click="dashboardCtr.showProfile(trip.user)" style="cursor: pointer;"><i class="fa fa-user"> </i><span style="margin-left:5px;"
+                    <h3 ng-click="dashboardCtr.showProfile(trip.user)"
+                        ng-show="$root.loggedIn"
+                        style="cursor: pointer;"><i class="fa fa-user"> </i><span style="margin-left:5px;"
                         ng-bind="trip.user.username"></span></h3>
+
                 </div>
                 <p ng-bind="dashboardCtr.convertToDate(trip.created) | date:'MMMM d, y h:mm a'"></p>
+                <i class="fa fa-share"></i><span ng-bind-html="dashboardCtr.showShareUrl($index)"></span>
 
             </div>
             <div class="col-sm-6">

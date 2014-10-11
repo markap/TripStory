@@ -61,3 +61,17 @@ class UserHandler(basecontroller.BaseHandler):
             'trips': user_trips,
             'user': user.User.as_dict(user_obj)
         }
+
+class ShareHandler(basecontroller.BaseHandler):
+
+    @decorator.json_out
+    def post(self):
+        payload = json.loads(self.request.body)
+
+
+        trip_obj = trip.Trip.get_by_id(payload['shareid'])
+
+
+        return {
+            'trips': [trip.Trip.as_share_dict(trip_obj)]
+        }
