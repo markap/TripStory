@@ -143,10 +143,12 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
         };
 
         var maps = [];
+        var markers = [];
 
         setTimeout(function(){
             for (var i = 0; i < data.trips.length; i++) {
               maps[i] = new google.maps.Map(document.getElementById('map' + i), mapOptions);
+              markers[i] = [];
 
               // default values: show marker 0
               var locations = data.trips[i].locations;
@@ -156,11 +158,15 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
               var previousMarker = null;
               var bounds = new google.maps.LatLngBounds();
+              var activeMarkerIcon = "/static/assets/star-active.png";
+              var inactiveMarkerIcon = "/static/assets/star-inactive.png";
 
               for (var j = 0; j < locations.length; j++) {
+                      var icon = (j === 0) ? activeMarkerIcon : inactiveMarkerIcon;
                       var currentMarker = new google.maps.Marker({
                             position: new google.maps.LatLng(locations[j].lat, locations[j].lng),
                             map: maps[i],
+                            icon: icon,
                             title: 'Hello World!',
                             id: {
                               'map': i,
@@ -168,6 +174,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
                             }
                         });
                         bounds.extend(currentMarker.position);
+                        markers[i].push(currentMarker);
 
                         if (previousMarker) {
                             $scope.calculateRoute(previousMarker.position, currentMarker.position, maps[i]);
@@ -179,6 +186,13 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
                                 var mapId = m.id['map'];
                                 var locationId = m.id['location'];
                                 console.log(data.trips[mapId]);
+
+                                console.log(markers);
+                                for (var i = 0; i < markers[mapId].length; i++) {
+                                  markers[mapId][i].setIcon(inactiveMarkerIcon);
+                                }
+                                m.setIcon(activeMarkerIcon);
+
                                 $scope['description' + mapId] = data.trips[mapId]['locations'][locationId]['description'];
                                 $scope.trips[mapId]['position'] = locationId;
                                 $scope.$apply();

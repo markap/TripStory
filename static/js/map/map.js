@@ -11,7 +11,8 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 }])
 
 .controller('MapController', ['$scope', '$location', 'Backend', '$rootScope',
-        function($scope, $location, Backend, $rootScope) {
+        '$timeout',
+        function($scope, $location, Backend, $rootScope, $timeout) {
 
     var data = [];
     $scope.currentPosition = -1;
@@ -60,10 +61,18 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
     var currentMarker = null;
 
+    $scope.setMarkersInactive = function() {
+       for (var i = 0; i < data.length; i++) {
+          data[i].marker.setIcon(inactiveMarkerIcon);
+      }
+    };
+
     google.maps.event.addListener(map, 'click', function(e) {
 
       $scope.currentPosition = -1;
       $scope.trip.description = '';
+
+      $scope.setMarkersInactive();
 
 
       if (currentMarker) {
@@ -78,7 +87,8 @@ angular.module('tripStoryApp.map', ['ngRoute'])
       $scope.$apply();
     });
 
-
+    var activeMarkerIcon = "/static/assets/star-active.png";
+    var inactiveMarkerIcon = "/static/assets/star-inactive.png";
 
     this.saveLocation = function(trip) {
       console.log(trip);
@@ -91,6 +101,7 @@ angular.module('tripStoryApp.map', ['ngRoute'])
         var fixedMarker = new google.maps.Marker({
           position: currentMarker.position,
           map: map,
+          icon: activeMarkerIcon,
           id: data.length
         });
         currentMarker = null;
@@ -129,6 +140,9 @@ angular.module('tripStoryApp.map', ['ngRoute'])
                 currentMarker.setMap(null);
                 currentMarker = null;
             };
+
+            $scope.setMarkersInactive();
+            m.setIcon(activeMarkerIcon);
 
             $scope.trip.description = poi['description'];
             $scope.currentPosition = position;
@@ -227,8 +241,14 @@ angular.module('tripStoryApp.map', ['ngRoute'])
         };
         trip.locations.push(location);
       }
+
+
       Backend.mapService().save(trip, function(data) {
-        $location.path('dashboard');
+        $timeout(function() {
+          $location.path('dashboard');
+        }, 100);
+
+
       }, function(err) {
         console.log(err);
       });
