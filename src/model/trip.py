@@ -37,6 +37,17 @@ class Trip:
     def get_by_id(id_):
         return model.Trip.get_by_id(long(id_))
 
+    @staticmethod
+    def set_like(trip_obj, user_obj):
+        likes = trip_obj.likes
+        if str(user_obj.key.id()) in likes:
+            del likes[str(user_obj.key.id())]
+        else:
+            likes[user_obj.key.id()] = user_obj.username
+        trip_obj.likes = likes
+        trip_obj.put()
+
+
 
     @staticmethod
     def as_dict(obj):
@@ -44,6 +55,7 @@ class Trip:
             'id': obj.key.id(),
             'name': obj.name,
             'created': obj.created.isoformat(),
-            'locations': obj.locations
+            'locations': obj.locations,
+            'likes': obj.likes
 
         }

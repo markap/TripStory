@@ -17,6 +17,7 @@ class Trip(ndb.Model):
     user = ndb.KeyProperty(kind='User')
     locations = ndb.JsonProperty()
     hashtags = ndb.StringProperty(repeated=True)
+    likes = ndb.JsonProperty(default={})
 
 
 

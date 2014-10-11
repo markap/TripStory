@@ -30,8 +30,18 @@
             </div>
             <div class="col-sm-6">
                 <div id="map{{$index}}" ></div>
-                <blockquote ng-show="{{trip.name}}">
-                <p ng-bind-html="dashboardCtr.hashTagUrl(trip.name)" hashtagify></p>
+                <blockquote>
+                    <span
+                        ng-click="dashboardCtr.giveLike(trip.id, $index)"
+
+                        ng-class="{'glyphicon glyphicon-heart heart red-heart': dashboardCtr.hasLike(true, $index),
+                            'glyphicon glyphicon-heart heart': dashboardCtr.hasLike(false, $index)}">
+
+                    </span>
+                    <span ng-bind-html="dashboardCtr.showLikes($index)">
+
+                    </span>
+                <p ng-show="{{trip.name}}" ng-bind-html="dashboardCtr.hashTagUrl(trip.name)" hashtagify></p>
                 </blockquote>
             </div>
             <div class="col-sm-6">

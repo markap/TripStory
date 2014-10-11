@@ -219,4 +219,36 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
         $location.path('profile/' + user.id);
       }
     };
+
+
+    this.hasLike = function(expectsLike, index) {
+      if ($rootScope.user.id in $scope.trips[index]['likes']) {
+          return expectsLike;
+      }
+      return !expectsLike;
+    };
+
+
+    this.giveLike = function(tripId, index) {
+      Backend.mapService().giveLike(tripId, function(data) {
+        $scope.trips[index]['likes'] = data['likes'];
+      }, function(err) {
+        console.log(err);
+      });
+    };
+
+    this.showLikes = function(index) {
+
+      if (!(index in $scope.trips)) {
+        return '';
+      }
+
+      var html = [];
+      var likes = $scope.trips[index]['likes'];
+
+      for (var likeId in likes) {
+        html.push('<a href="#profile/' + likeId + '">' + likes[likeId] + '</a>');
+      }
+      return html.join(", ");
+    };
 }]);

@@ -23,6 +23,7 @@ actions = [
     ('/api/map/save', mapcontroller.SaveHandler),
     ('/api/map/delete', mapcontroller.DeleteHandler),
     ('/api/map/upload', mapcontroller.ImageUploadHandler),
+    ('/api/map/like', mapcontroller.LikeHandler),
 
     ('/api/img/(.*)', imagehandler.ServeHandler)
 

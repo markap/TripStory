@@ -131,6 +131,18 @@ backendServices.factory('Backend', ['$resource',
                 success(data);
             }
           });
+        },
+        giveLike: function(tripId, success, failure) {
+          return $resource('/api/map/like').save({'tripid': tripId}, function(data) {
+            if (data.hasOwnProperty('errors')) {
+
+                failure(data.errors);
+
+            } else {
+
+                success(data);
+            }
+          });
         }
       };
     };

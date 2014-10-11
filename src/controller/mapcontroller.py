@@ -46,3 +46,19 @@ class DeleteHandler(basecontroller.BaseHandler):
             return
         return self.format_error("You are allowed to delete this item")
 
+
+class LikeHandler(basecontroller.BaseHandler):
+
+    @decorator.json_out
+    @decorator.auth
+    def post(self):
+        payload = json.loads(self.request.body)
+        user_obj = self.get_user()
+
+        trip_obj = trip.Trip.get_by_id(payload['tripid'])
+        trip.Trip.set_like(trip_obj, user_obj)
+
+        return trip.Trip.as_dict(trip_obj)
+
+
+
