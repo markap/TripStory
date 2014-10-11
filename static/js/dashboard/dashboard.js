@@ -144,6 +144,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
         var maps = [];
         var markers = [];
+        var markerData = [];
 
         setTimeout(function(){
             for (var i = 0; i < data.trips.length; i++) {
@@ -152,6 +153,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
               // default values: show marker 0
               var locations = data.trips[i].locations;
+              markerData[i] = {'locations': locations};
               $scope['description' + i] = locations[0].description;
               $scope.trips[i]['position'] = 0;
               $scope.$apply();
@@ -185,7 +187,10 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
                                 var mapId = m.id['map'];
                                 var locationId = m.id['location'];
-                                console.log(data.trips[mapId]);
+                                console.log("ids");
+                                console.log(mapId);
+                                console.log(locationId);
+                                console.log(markerData[mapId]);
 
                                 console.log(markers);
                                 for (var i = 0; i < markers[mapId].length; i++) {
@@ -193,7 +198,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
                                 }
                                 m.setIcon(activeMarkerIcon);
 
-                                $scope['description' + mapId] = data.trips[mapId]['locations'][locationId]['description'];
+                                $scope['description' + mapId] = markerData[mapId]['locations'][locationId]['description'];
                                 $scope.trips[mapId]['position'] = locationId;
                                 $scope.$apply();
                             };
@@ -230,7 +235,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
     this.deleteLocation = function(trips, alertId, tripId) {
 
       Backend.mapService().delete(tripId, function(data) {
-        $scope.displayLocationDeletePopup.splice(alertId, 1);
+        $scope.displayLocationDeletePopup[alertId] = false;
         trips.splice(alertId, 1);
       }, function(err) {
         console.log(err);
