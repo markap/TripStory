@@ -151,8 +151,8 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
     $scope.displayLocationDeletePopup = [];
 
-    this.showDeleteButton = function(user) {
-      return user.id === $scopeRoot.user.id;
+    this.isMyStory = function(user) {;
+      return user.id === $rootScope.user.id;
     };
 
     this.showDeleteLocationPopup = function(show, alertId) {
@@ -178,4 +178,11 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
     };
 
 
+    this.showProfile = function(user) {
+      if (this.isMyStory(user)) {
+        $location.path('profile');
+      } else {
+        $location.path('profile/' + user.id);
+      }
+    };
 }]);

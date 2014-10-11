@@ -1,6 +1,6 @@
 
 import basecontroller
-
+import json
 
 from src.model import decorator
 from src.model import trip
@@ -14,7 +14,38 @@ class DashboardHandler(basecontroller.BaseHandler):
     @decorator.json_out
     @decorator.auth
     def get(self):
-        user_obj = self.get_user()
+
+        trip_query = trip.Trip.get().fetch()
+
+        trips_overview = []
+        users = {}
+
+        for entry in trip_query:
+            trip_data = trip.Trip.as_dict(entry)
+
+            if entry.user in users:
+                trip_data['user'] = users[entry.user]
+            else:
+                user_data = user.User.as_dict(entry.user.get())
+                trip_data['user'] = user_data
+                users[entry.key] = user_data
+
+            trips_overview.append(trip_data)
+
+        return {
+            'trips': trips_overview
+        }
+
+
+class UserHandler(basecontroller.BaseHandler):
+    @decorator.json_out
+    @decorator.auth
+    def post(self):
+        payload = json.loads(self.request.body)
+        if 'userid' in payload:
+            user_obj = user.User.get_by_id(payload['userid'])
+        else:
+            user_obj = self.get_user()
 
         trip_query = trip.Trip.get_by_user(user_obj).fetch()
 
@@ -27,5 +58,6 @@ class DashboardHandler(basecontroller.BaseHandler):
             user_trips.append(trip_data)
 
         return {
-            'trips': user_trips
+            'trips': user_trips,
+            'user': user.User.as_dict(user_obj)
         }

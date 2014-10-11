@@ -1,22 +1,25 @@
 'use strict';
 
-angular.module('tripStoryApp.hashtag', ['ngRoute'])
+angular.module('tripStoryApp.profile', ['ngRoute'])
 .config(['$routeProvider', function($routeProvider) {
 
 
-  $routeProvider.when('/hashtag/:hashtag', {
-    templateUrl: '/static/js/hashtag/hashtag.html',
-    controller: 'HashtagController'
+  $routeProvider.when('/profile/:userId', {
+    templateUrl: '/static/js/profile/profile.html',
+    controller: 'ProfileController'
+  });
+  $routeProvider.when('/profile', {
+    templateUrl: '/static/js/profile/profile.html',
+    controller: 'ProfileController'
   });
 }])
 
-.controller('HashtagController', ['$scope', '$location', 'Backend', '$rootScope',
-        '$routeParams',
-        function($scope, $location, Backend, $rootScope, $routeParams) {
 
+.controller('ProfileController', ['$scope', '$location', 'Backend',
+        '$rootScope', '$sce', '$routeParams',
+        function($scope, $location, Backend, $rootScope, $sce, $routeParams) {
 
-    $scope.hashtag = $routeParams.hashtag;
-
+    $scope.trips = [];
 
 
     var directionsService = new google.maps.DirectionsService();
@@ -48,8 +51,10 @@ angular.module('tripStoryApp.hashtag', ['ngRoute'])
     };
 
 
-    Backend.dashboardService().getForHashtag($scope.hashtag, function(data) {
+    var userId = $routeParams.userId ? $routeParams.userId : null;
+    Backend.dashboardService().getForUser(userId, function(data) {
         $scope.trips = data.trips;
+        $scope.profile = data.user;
 
         var mapOptions = {
             zoom: 4,
@@ -147,14 +152,14 @@ angular.module('tripStoryApp.hashtag', ['ngRoute'])
         outArr.push(val);
       });
 
-      return outArr.join(' ');
+      return $sce.trustAsHtml(outArr.join(' '));
     };
 
 
     $scope.displayLocationDeletePopup = [];
 
-    this.isMyStory = function(user) {
-      return user.id === $rootScope.user.id;
+    this.showDeleteButton = function(user) {
+      return user.id === $scopeRoot.user.id;
     };
 
     this.showDeleteLocationPopup = function(show, alertId) {
@@ -178,7 +183,6 @@ angular.module('tripStoryApp.hashtag', ['ngRoute'])
       });
 
     };
-
 
     this.showProfile = function(user) {
       if (this.isMyStory(user)) {

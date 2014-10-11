@@ -21,6 +21,11 @@ class Trip:
         return obj
 
     @staticmethod
+    def get():
+        return model.Trip.query(model.Trip.active == True).order(-model.Trip.created)
+
+
+    @staticmethod
     def get_by_user(user):
         return model.Trip.query(model.Trip.user == user.key, model.Trip.active == True).order(-model.Trip.created)
 

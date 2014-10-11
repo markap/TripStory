@@ -76,6 +76,22 @@ backendServices.factory('Backend', ['$resource',
                 });
             },
 
+            getForUser: function(userId, success, failure) {
+                var params = {};
+                if (userId) {
+                  params = {'userid': userId};
+                }
+                return $resource('/api/profile').save(params, function(data) {
+                    if (data.hasOwnProperty('errors')) {
+                        failure(data.errors);
+
+                    } else {
+                        console.log(data);
+                        success(data);
+                    }
+                });
+            },
+
             getForHashtag: function(hashtag, success, failure) {
                 return $resource('/api/search').save({'hashtag': hashtag}, function(data) {
                     if (data.hasOwnProperty('errors')) {

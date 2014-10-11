@@ -1,13 +1,13 @@
 
     <div class="jumbotron jumbotron-ad hidden-print">
       <div class="container">
-        <p>{{$root.user.username}}, you're an explorer. Check it out!</p>
+        <p ng-show="profile.username">{{ profile.username }}'s profile</p>
       </div>
     </div>
 
 
     <div class="container" ng-include src="'/static/js/includes/stories.html'"
-            ng-controller="DashboardController as dashboardCtr">
+            ng-controller="ProfileController as dashboardCtr">
 
 
 

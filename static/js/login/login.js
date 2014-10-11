@@ -30,6 +30,7 @@ angular.module('tripStoryApp.login', ['ngRoute'])
         $location.path('dashboard');
       }, function(err) {
         $scope.errors = err;
+        $scope.registered = false;
       });
     };
 
