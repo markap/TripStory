@@ -1,6 +1,12 @@
 
         <ng-include src="'/static/js/includes/gallery.html'"></ng-include>
 
+        <div class="container" ng-show="dashboardCtr.showProfileCreateStory()">
+          <a href="#map" class="btn btn-danger btn-lg">
+                <i class="fa fa-heart-o"></i>Create your first story
+          </a>
+        </div>
+
 
        <div class="row" ng-repeat="trip in trips" my-repeat-directive>
             <hr />
@@ -13,6 +19,7 @@
                         ng-click="dashboardCtr.deleteLocation(trips, $index, trip.id)">Yes</a>
                 </div>
             </div><!-- end alert -->
+
             <div class="container">
                 <div>
 
@@ -29,7 +36,7 @@
 
                 </div>
                 <p ng-bind="dashboardCtr.convertToDate(trip.created) | date:'MMMM d, y h:mm a'"></p>
-                <i class="fa fa-share"></i><span ng-bind-html="dashboardCtr.showShareUrl($index)"></span>
+                <i class="fa fa-share"></i><a href="#share/{{trip.id}}" target="_blank">Share this trip!</a>
 
             </div>
             <div class="col-sm-6">

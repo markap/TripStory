@@ -44,7 +44,11 @@ tripStoryApp.controller('MainController', ['$rootScope', '$location', 'Backend',
             path.indexOf('/login') === 0;
       };
 
-      $scope.$on('$locationChangeStart', function(event) {
+      $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+        if (newUrl === oldUrl) {
+          return;
+        }
+
         var path = $location.path();
         if (!$rootScope.loggedIn && !$scope.noLoginNecessary(path)) {
             $location.path('login');
@@ -54,14 +58,6 @@ tripStoryApp.controller('MainController', ['$rootScope', '$location', 'Backend',
 
       this.showNavbar = function() {
 
-        if ($rootScope.loggedIn ||
-           $scope.noLoginNecessary($location.path())) {
-            // stupid
-
-         } else {
-
-           $location.path('login');
-         }
          return $rootScope.loggedIn ||
             $location.path().indexOf('/share') === 0;
       };

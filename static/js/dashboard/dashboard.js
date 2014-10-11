@@ -266,7 +266,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
     };
 
 
-    this.showShareUrl = function(index) {
-      return '<a target="blank" href="#share/' + $scope.trips[index]['id'] + '"> Share this story</a>';
+    this.showProfileCreateStory = function() {
+      return $location.path() === '/profile' && $scope.trips.length === 0;
     };
 }]);
