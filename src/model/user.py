@@ -78,7 +78,7 @@ class User:
 
     @staticmethod
     def get_by_id(id_):
-        return model.User.get_by_id(id_)
+        return model.User.get_by_id(long(id_))
 
     @staticmethod
     def as_dict(obj):

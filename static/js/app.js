@@ -6,10 +6,12 @@ var tripStoryApp = angular.module('tripStoryApp', [
   'ngSanitize',
   'backendServices',
   'lr.upload',
+  'hashtagify',
   'tripStoryApp.login',
   'tripStoryApp.register',
   'tripStoryApp.dashboard',
-  'tripStoryApp.map'
+  'tripStoryApp.map',
+  'tripStoryApp.hashtag'
 ]);
 
 tripStoryApp.config(['$routeProvider',

@@ -1,20 +1,22 @@
 'use strict';
 
-angular.module('tripStoryApp.dashboard', ['ngRoute'])
+angular.module('tripStoryApp.hashtag', ['ngRoute'])
 .config(['$routeProvider', function($routeProvider) {
 
 
-  $routeProvider.when('/dashboard', {
-    templateUrl: '/static/js/dashboard/dashboard.html',
-    controller: 'DashboardController'
+  $routeProvider.when('/hashtag/:hashtag', {
+    templateUrl: '/static/js/hashtag/hashtag.html',
+    controller: 'HashtagController'
   });
 }])
 
+.controller('HashtagController', ['$scope', '$location', 'Backend', '$rootScope',
+        '$routeParams',
+        function($scope, $location, Backend, $rootScope, $routeParams) {
 
-.controller('DashboardController', ['$scope', '$location', 'Backend', '$rootScope', '$sce',
-        function($scope, $location, Backend, $rootScope, $sce) {
 
-    $scope.trips = [];
+    $scope.hashtag = $routeParams.hashtag;
+
 
 
     var directionsService = new google.maps.DirectionsService();
@@ -46,7 +48,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
     };
 
 
-    Backend.dashboardService().get(function(data) {
+    Backend.dashboardService().getForHashtag($scope.hashtag, function(data) {
         $scope.trips = data.trips;
 
         var mapOptions = {
@@ -145,7 +147,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
         outArr.push(val);
       });
 
-      return $sce.trustAsHtml(outArr.join(' '));
+      return outArr.join(' ');
     };
 
 

@@ -4,7 +4,7 @@
 import webapp2
 
 from src.controller import webcontroller, usercontroller, dashboardcontroller,\
-    mapcontroller, imagehandler
+    mapcontroller, imagehandler, searchcontroller
 
 actions = [
 
@@ -16,8 +16,10 @@ actions = [
     ('/api/user/logout', usercontroller.UserLogoutHandler),
 
     ('/api/dashboard', dashboardcontroller.DashboardHandler),
+    ('/api/search', searchcontroller.HashtagSearchHandler),
 
     ('/api/map/save', mapcontroller.SaveHandler),
+    ('/api/map/delete', mapcontroller.DeleteHandler),
     ('/api/map/upload', mapcontroller.ImageUploadHandler),
 
     ('/api/img/(.*)', imagehandler.ServeHandler)

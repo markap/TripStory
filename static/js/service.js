@@ -74,6 +74,18 @@ backendServices.factory('Backend', ['$resource',
                         success(data);
                     }
                 });
+            },
+
+            getForHashtag: function(hashtag, success, failure) {
+                return $resource('/api/search').save({'hashtag': hashtag}, function(data) {
+                    if (data.hasOwnProperty('errors')) {
+                        failure(data.errors);
+
+                    } else {
+                        console.log(data);
+                        success(data);
+                    }
+                });
             }
         };
     };
@@ -90,6 +102,18 @@ backendServices.factory('Backend', ['$resource',
 
                     success(data);
                 }
+          });
+        },
+        delete: function(tripId, success, failure) {
+          return $resource('/api/map/delete').save({'tripid': tripId}, function(data) {
+            if (data.hasOwnProperty('errors')) {
+
+                failure(data.errors);
+
+            } else {
+
+                success(data);
+            }
           });
         }
       };

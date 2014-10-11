@@ -12,6 +12,26 @@ indexes:
 
 - kind: Trip
   properties:
+  - name: active
+  - name: hashtags
+  - name: created
+    direction: desc
+
+- kind: Trip
+  properties:
+  - name: active
+  - name: user
+  - name: created
+    direction: desc
+
+- kind: Trip
+  properties:
+  - name: hashtags
+  - name: created
+    direction: desc
+
+- kind: Trip
+  properties:
   - name: user
   - name: created
 

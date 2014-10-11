@@ -1,10 +1,9 @@
 
     <div class="jumbotron jumbotron-ad hidden-print">
       <div class="container">
-        <p>{{$root.user.username}}, you're an explorer. Check it out!</p>
+        <p>Stories for #{{hashtag}}</p>
       </div>
     </div>
-
 
     <div class="container" ng-include src="'/static/js/includes/stories.html'"
             ng-controller="HashtagController as dashboardCtr">

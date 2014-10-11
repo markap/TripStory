@@ -32,3 +32,17 @@ class SaveHandler(basecontroller.BaseHandler):
         trip_obj = trip.Trip.create(self.get_user(), payload)
         return trip.Trip.as_dict(trip_obj)
 
+
+class DeleteHandler(basecontroller.BaseHandler):
+    @decorator.json_out
+    @decorator.auth
+    def post(self):
+        payload = json.loads(self.request.body)
+        trip_obj = trip.Trip.get_by_id(payload['tripid'])
+
+        if (trip_obj.user == self.get_user().key):
+            trip_obj.active = False
+            trip_obj.put()
+            return
+        return self.format_error("You are allowed to delete this item")
+

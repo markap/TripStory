@@ -17,6 +17,9 @@ handlers:
 - url: /web/bower_components
   static_dir: bower_components
 
+- url: /web/node_modules
+  static_dir: node_modules
+
 
 - url: /web/.*
   script: main.app
