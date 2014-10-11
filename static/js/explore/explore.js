@@ -31,6 +31,7 @@ angular.module('tripStoryApp.explore', ['ngRoute'])
       var map = new google.maps.Map(document.getElementById('map'), mapOptions);
       var activeMarkerIcon = "/static/assets/star-active.png";
       var bounds = new google.maps.LatLngBounds();
+      var infoWindow = new google.maps.InfoWindow();
 
       for (var j = 0; j < data.trips.length; j++) {
           var locations = data.trips[j]['locations'][0];
@@ -51,16 +52,21 @@ angular.module('tripStoryApp.explore', ['ngRoute'])
           bounds.extend(currentMarker.position);
 
 
-          var infoWindow = new google.maps.InfoWindow({
-                content: content
-          });
 
-          google.maps.event.addListener(currentMarker, 'click', (function(aInfoWindow, aMarker) {
+          google.maps.event.addListener(currentMarker, 'click', (function(aMarker, aContent) {
             return function() {
-
-              aInfoWindow.open(map,aMarker);
+              infoWindow.close();
+              infoWindow.setContent(aContent);
+              infoWindow.open(map,aMarker);
             };
-          }(infoWindow, currentMarker)));
+          }(currentMarker, content)));
+
+          google.maps.event.addListener(map, 'click', function() {
+
+            for (var i = 0; i < infoWindows.length; i++) {
+                infoWindows[i].close();
+            }
+          });
       }
 
       map.fitBounds(bounds);
