@@ -35,9 +35,9 @@ angular.module('tripStoryApp.explore', ['ngRoute'])
       for (var j = 0; j < data.trips.length; j++) {
           var locations = data.trips[j]['locations'][0];
 
-          var content = "<div id='container' style='width:100px;'><h3>" + data.trips[j]['name'] + "</h3>"
-                        + "<a href='#details/" + data.trips[j]['id']
-                        + "' class='btn btn-custom'>More</button></div>";
+          var content = "<div id='container'><blockquote>" + data.trips[j]['name']
+                        + "<br /><a style='margin-top: 5px;' href='#details/" + data.trips[j]['id']
+                        + "' class='btn btn-custom'>Show me the story</button></blockquote></div>";
 
 
 
@@ -50,14 +50,17 @@ angular.module('tripStoryApp.explore', ['ngRoute'])
           });
           bounds.extend(currentMarker.position);
 
-          google.maps.event.addListener(currentMarker, 'click', (function(content, aMarker) {
-            return function() {
-              var infowindow = new google.maps.InfoWindow({
+
+          var infoWindow = new google.maps.InfoWindow({
                 content: content
-              });
-              infowindow.open(map,aMarker);
+          });
+
+          google.maps.event.addListener(currentMarker, 'click', (function(aInfoWindow, aMarker) {
+            return function() {
+
+              aInfoWindow.open(map,aMarker);
             };
-          }(content, currentMarker)));
+          }(infoWindow, currentMarker)));
       }
 
       map.fitBounds(bounds);
