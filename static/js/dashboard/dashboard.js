@@ -323,4 +323,6 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
     this.showHashtagMap = function(path) {
       $location.path(path + '/' + $scope.hashtag);
     };
+
+
 }]);
