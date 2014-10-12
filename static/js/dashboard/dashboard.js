@@ -112,7 +112,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
 
     this.hasImage = function(mapId, imageId) {
-      console.log('hasImage ' + mapId + ' ' + imageId);
+
       return mapId in $scope.trips &&
                 'position' in $scope.trips[mapId] &&
                 imageId in $scope.trips[mapId]['locations'][$scope.trips[mapId]['position']]['images']
@@ -163,7 +163,10 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
               markers[i] = [];
 
               // default values: show marker 0
+              console.log(data.trips);
               var locations = data.trips[i].locations;
+              console.log('loc');
+              console.log(locations);
               markerData[i] = {'locations': locations};
               $scope['description' + i] = locations[0].description;
               $scope.trips[i]['position'] = 0;
@@ -176,6 +179,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
               for (var j = 0; j < locations.length; j++) {
                       var icon = (j === 0) ? activeMarkerIcon : inactiveMarkerIcon;
+
                       var currentMarker = new google.maps.Marker({
                             position: new google.maps.LatLng(locations[j].lat, locations[j].lng),
                             map: maps[i],

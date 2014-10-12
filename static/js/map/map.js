@@ -153,6 +153,7 @@ angular.module('tripStoryApp.map', ['ngRoute'])
     var inactiveMarkerIcon = "/static/assets/star-inactive.png";
 
     this.saveLocation = function(trip) {
+
       console.log(trip);
 
 
@@ -287,6 +288,9 @@ angular.module('tripStoryApp.map', ['ngRoute'])
     };
 
     this.saveTrip = function(name) {
+      if (data.length === 0) {
+          return;
+      }
       console.log(name);
       console.log(data);
       var trip = {
