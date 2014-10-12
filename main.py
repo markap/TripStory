@@ -8,6 +8,8 @@ from src.controller import webcontroller, usercontroller, dashboardcontroller,\
 
 actions = [
 
+    ('/', webcontroller.WebRedirectHandler),
+
     ('/web/', webcontroller.WebHandler),
 
     ('/api/user/signin', usercontroller.UserHandler),

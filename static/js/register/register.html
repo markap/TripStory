@@ -1,7 +1,7 @@
     <div class="container">
 
       <form class="form-signin" name="signinForm" role="form" ng-controller="RegisterController as registerCtr" novalidate>
-        <h2 class="form-signin-heading">Super Quick Sign-up</h2>
+        <h2 class="form-signin-heading">Quick Sign-up</h2>
         <div ng-show="errors" class="alert alert-danger" >
           <ul class="error" ng-repeat="error in errors">
             <li class="error">{{ error }}</li>
@@ -16,7 +16,7 @@
         <input type="password" class="form-control form-signin-bottom" placeholder="Password"
             ng-model="user.password" ng-minlength="4" ng-maxlength="16" required>
 
-        <button class="btn btn-lg btn-primary btn-block" ng-click="signinForm.$valid && registerCtr.signIn(user)">Sign up</button>
+        <button class="btn btn-lg btn-custom btn-block" ng-click="signinForm.$valid && registerCtr.signIn(user)">Sign up</button>
         <a href='#/login'>Already a member? Sign in!</a>
       </form>
 
