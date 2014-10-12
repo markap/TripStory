@@ -23,11 +23,12 @@ handlers:
 
 - url: /web/.*
   script: main.app
-
+  secure: always
 
 
 - url: /api/.*
   script: main.app
+  secure: always
 
 
 - url: /.*

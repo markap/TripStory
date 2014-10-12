@@ -48,17 +48,6 @@ tripStoryApp.controller('MainController', ['$rootScope', '$location', 'Backend',
             path.indexOf('/login') === 0;
       };
 
-      $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
-        if (newUrl === oldUrl) {
-          return;
-        }
-
-        var path = $location.path();
-        if (!$rootScope.loggedIn && !$scope.noLoginNecessary(path)) {
-            $location.path('login');
-        }
-
-      });
 
       this.showNavbar = function() {
 
@@ -80,10 +69,11 @@ tripStoryApp.controller('MainController', ['$rootScope', '$location', 'Backend',
 
       this.logout = function() {
 
+        delete $rootScope.loggedIn;
+        delete $rootScope.user;
+
         Backend.userService().logOut(function(data) {
           //service
-          delete $rootScope.loggedIn;
-          delete $rootScope.user;
 
           $location.path('login');
         },
