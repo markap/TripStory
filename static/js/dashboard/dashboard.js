@@ -315,7 +315,12 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
     };
 
 
-    this.showMap = function() {
-      $location.path('explore');
+    this.showMap = function(path) {
+      var userId = $routeParams.userId ? $routeParams.userId : "";
+      $location.path(path + '/' + userId);
+    };
+
+    this.showHashtagMap = function(path) {
+      $location.path(path + '/' + $scope.hashtag);
     };
 }]);

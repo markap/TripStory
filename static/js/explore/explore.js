@@ -17,18 +17,55 @@ angular.module('tripStoryApp.explore', ['ngRoute'])
 
     $scope.trips = [];
 
+    if ($location.path() === '/explore') {
 
-    Backend.dashboardService().get(function(data) {
+        Backend.dashboardService().get(function(data) {
+          $scope.populateMap(data);
+        },
+        function(err) {
+          console.log(err);
+        });
+
+    } else if ($location.path().indexOf('/exploreprofile') === 0) {
+
+        var userId = $routeParams.userId ? $routeParams.userId : null;
+
+        Backend.dashboardService().getForUser(userId, function(data) {
+          $scope.profile = data.user;
+          $scope.populateMap(data);
+        },
+        function(err) {
+          console.log(err);
+        });
+
+    } else if ($location.path().indexOf('/explorehashtag') === 0) {
+
+        $scope.hashtag = $routeParams.hashtag;
+
+        Backend.dashboardService().getForHashtag($scope.hashtag, function(data) {
+          $scope.populateMap(data);
+        },
+        function(err) {
+          console.log(err);
+        });
+    }
+
+
+
+    $scope.populateMap = function(data) {
       $scope.trips = data.trips;
 
       var mapOptions = {
-        zoom: 4,
-        center: new google.maps.LatLng(40.0000, -98.0000),
+        zoom: 2,
+        center: new google.maps.LatLng(20, 20),
         mapTypeId: google.maps.MapTypeId.TERRAIN
       };
 
 
+
+
       var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
       var activeMarkerIcon = "/static/assets/star-active.png";
       var bounds = new google.maps.LatLngBounds();
       var infoWindow = new google.maps.InfoWindow();
@@ -69,19 +106,18 @@ angular.module('tripStoryApp.explore', ['ngRoute'])
           });
       }
 
-      map.fitBounds(bounds);
-    },
-    function(err) {
-      console.log(err);
-    });
-
-
-    this.show = function() {
-        alert('hallo');
+      if (data.trips.length > 0) {
+        map.fitBounds(bounds);
+      }
     };
 
 
-    this.showList = function() {
-      $location.path('dashboard');
+    this.showList = function(path) {
+      var userId = $routeParams.userId ? $routeParams.userId : "";
+      $location.path(path + '/' + userId);
+    };
+
+    this.showHashtagList = function(path) {
+      $location.path(path + '/' + $scope.hashtag);
     };
 }]);

@@ -15,7 +15,9 @@ var tripStoryApp = angular.module('tripStoryApp', [
   'tripStoryApp.profile',
   'tripStoryApp.share',
   'tripStoryApp.explore',
-  'tripStoryApp.details'
+  'tripStoryApp.details',
+  'tripStoryApp.exploreprofile',
+  'tripStoryApp.explorehashtag'
 ]);
 
 tripStoryApp.config(['$routeProvider',

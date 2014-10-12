@@ -6,7 +6,7 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
   $routeProvider.when('/map', {
     templateUrl: '/static/js/map/map.html',
-    controller: 'MapController'
+    controller: 'MapController as mapCtr'
   });
 }])
 
@@ -30,7 +30,7 @@ angular.module('tripStoryApp.map', ['ngRoute'])
     var directionsService = new google.maps.DirectionsService();
     var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    var currentMarker = null;
+    $scope.currentMarker = null;
 
     // Create the search box and link it to the UI element.
     var input = /** @type {HTMLInputElement} */(
@@ -55,14 +55,14 @@ angular.module('tripStoryApp.map', ['ngRoute'])
           return;
         }
 
-        if (currentMarker) {
-            currentMarker.setMap(null);
+        if ($scope.currentMarker) {
+            $scope.currentMarker.setMap(null);
         }
 
         var bounds = new google.maps.LatLngBounds();
 
         // Create a marker for each place.
-        currentMarker = new google.maps.Marker({
+        $scope.currentMarker = new google.maps.Marker({
             map: map,
             title: places[0].name,
             position: places[0].geometry.location
@@ -124,7 +124,6 @@ angular.module('tripStoryApp.map', ['ngRoute'])
     };
 
 
-    var currentMarker = null;
 
     $scope.setMarkersInactive = function() {
        for (var i = 0; i < data.length; i++) {
@@ -142,11 +141,11 @@ angular.module('tripStoryApp.map', ['ngRoute'])
       $scope.setMarkersInactive();
 
 
-      if (currentMarker) {
-          currentMarker.setMap(null);
+      if ($scope.currentMarker) {
+          $scope.currentMarker.setMap(null);
       }
 
-      currentMarker = new google.maps.Marker({
+      $scope.currentMarker = new google.maps.Marker({
         position: e.latLng,
         map: map,
         title: ''
@@ -162,17 +161,17 @@ angular.module('tripStoryApp.map', ['ngRoute'])
       console.log(trip);
 
 
-      if (currentMarker) {
-        currentMarker.setMap(null);
-        console.log(currentMarker.position);
+      if ($scope.currentMarker) {
+        $scope.currentMarker.setMap(null);
+
 
         var fixedMarker = new google.maps.Marker({
-          position: currentMarker.position,
+          position: $scope.currentMarker.position,
           map: map,
           icon: activeMarkerIcon,
           id: data.length
         });
-        currentMarker = null;
+        $scope.currentMarker = null;
 
         // calculate route btw new and previous marker
         if (data.length > 0) {
@@ -204,9 +203,9 @@ angular.module('tripStoryApp.map', ['ngRoute'])
               }
             }
 
-            if (currentMarker) {
-                currentMarker.setMap(null);
-                currentMarker = null;
+            if ($scope.currentMarker) {
+                $scope.currentMarker.setMap(null);
+                $scope.currentMarker = null;
             };
 
             $scope.setMarkersInactive();
@@ -255,7 +254,7 @@ angular.module('tripStoryApp.map', ['ngRoute'])
     };
 
     this.showSaveButton = function() {
-      return currentMarker !== null;
+      return $scope.currentMarker !== null;
     };
 
     this.onImageUploadSuccess = function(response) {

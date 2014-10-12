@@ -2,6 +2,10 @@
     <div class="jumbotron jumbotron-ad hidden-print">
       <div class="container">
         <p ng-show="profile.username">{{ profile.username }}'s profile</p>
+        <button type="button" class="btn btn-black btn-circle btn-xl active">
+        <i class="glyphicon glyphicon-list"></i></button>
+        <button ng-click="dashboardCtr.showMap('exploreprofile')" type="button" style="margin-left:20px;" class="btn btn-black btn-circle btn-xl">
+        <i class="glyphicon glyphicon-map-marker"></i></button>
       </div>
     </div>
 
