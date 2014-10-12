@@ -1,4 +1,3 @@
-    <ng-include src="'/static/js/includes/gallery.html'"></ng-include>
 
     <div class="jumbotron jumbotron-ad hidden-print">
       <div class="container">
@@ -48,7 +47,7 @@
                           url="/api/map/upload"
                           on-error="mapCtr.onImageUploadError(response)"
                           on-success="mapCtr.onImageUploadSuccess(response)">
-                          Add photos to your destination
+                          Add up to 3 images for each location
                         </button>
 
                         <button type="form-control button"
@@ -65,26 +64,58 @@
 
 
                     <div class="row">
-                        <div ng-show="mapCtr.hasImage(0)" class="col-sm-4">
-                            <a ng-show="mapCtr.hasImage(0)" href="{{mapCtr.showImage(0)}}" data-gallery>
-                            <img
-                                ng-src="{{mapCtr.showImage(0)}}"
-                                class="img-thumbnail">
-                            </a>
+                        <div ng-show="mapCtr.hasImage(0)" class="col-sm-4" >
+
+                            <div class="photo-wrapper">
+                                <div class="photo">
+                                    <img class="img-thumbnail"
+                                        ng-src="{{mapCtr.showImage(0)}}" />
+
+                                    <span ng-click="mapCtr.deleteImage(0)"
+                                        class="label label-inverse photo-label">
+                                        <button type="form-control button" class="btn btn-black">
+                                        <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                        </button>
+                                    </span>
+
+                                </div>
+                            </div>
+
                         </div>
                         <div ng-show="mapCtr.hasImage(1)" class="col-sm-4" >
-                            <a ng-show="mapCtr.hasImage(1)" href="{{mapCtr.showImage(1)}}" data-gallery>
-                            <img
-                                ng-src="{{mapCtr.showImage(1)}}"
-                                class="img-thumbnail">
-                            </a>
+
+                            <div class="photo-wrapper">
+                                <div class="photo">
+                                    <img class="img-thumbnail"
+                                        ng-src="{{mapCtr.showImage(1)}}" />
+
+                                    <span ng-click="mapCtr.deleteImage(1)"
+                                        class="label label-inverse photo-label">
+                                        <button type="form-control button" class="btn btn-black">
+                                        <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                        </button>
+                                    </span>
+
+                                </div>
+                            </div>
+
                         </div>
                         <div ng-show="mapCtr.hasImage(2)" class="col-sm-4" >
-                            <a ng-show="mapCtr.hasImage(2)" href="{{mapCtr.showImage(2)}}" data-gallery>
-                            <img
-                                ng-src="{{mapCtr.showImage(2)}}"
-                                class="img-thumbnail">
-                            </a>
+                            <div class="photo-wrapper">
+                                <div class="photo">
+                                    <img class="img-thumbnail"
+                                        ng-src="{{mapCtr.showImage(2)}}" />
+
+                                    <span ng-click="mapCtr.deleteImage(2)"
+                                        class="label label-inverse photo-label">
+                                        <button type="form-control button" class="btn btn-black">
+                                        <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                        </button>
+                                    </span>
+
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>

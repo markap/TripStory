@@ -249,3 +249,23 @@ fieldset[disabled] .btn-black.active {
 .pac-container {
   font-family: Roboto;
 }
+
+
+
+.photo-wrapper {
+    position: relative;
+
+}
+.photo-wrapper .photo {
+    position: relative;
+    margin: 0 auto;
+    display: table;
+}
+.photo-wrapper .photo-label {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+.photo-wrapper .photo-label {
+    float: right;
+}

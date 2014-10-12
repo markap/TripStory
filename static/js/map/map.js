@@ -266,6 +266,10 @@ angular.module('tripStoryApp.map', ['ngRoute'])
       console.log(err);
     };
 
+    this.deleteImage = function(position) {
+      data[$scope.currentPosition].images.splice(position, 1);
+    };
+
     this.hasImage = function(index) {
       console.log("has image at index " + index);
       return $scope.currentPosition in data

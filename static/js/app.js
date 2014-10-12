@@ -49,6 +49,8 @@ tripStoryApp.controller('MainController', ['$rootScope', '$location', 'Backend',
       };
 
 
+
+
       this.showNavbar = function() {
 
          return $rootScope.loggedIn ||

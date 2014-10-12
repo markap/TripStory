@@ -40,7 +40,7 @@ class Trip:
 
     @staticmethod
     def get_by_hashtag(hashtag):
-        return model.Trip.query().filter(model.Trip.hashtags.IN([hashtag]), model.Trip.active == True).order(-model.Trip.created)
+        return model.Trip.query().filter(model.Trip.hashtags.IN([hashtag.lower()]), model.Trip.active == True).order(-model.Trip.created)
 
     @staticmethod
     def get_by_id(id_):
