@@ -72,7 +72,12 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
         bounds.extend(places[0].geometry.location);
         if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
-          var extendPoint = new google.maps.LatLng(bounds.getNorthEast().lat() + 2, bounds.getNorthEast().lng() + 2);
+          var extendPoint = new google.maps.LatLng(bounds.getNorthEast().lat() + 1,
+                                            bounds.getNorthEast().lng() + 1);
+          bounds.extend(extendPoint);
+
+          extendPoint = new google.maps.LatLng(bounds.getSouthWest().lat() - 1,
+                                            bounds.getSouthWest().lng() - 1);
           bounds.extend(extendPoint);
         }
         map.fitBounds(bounds);
