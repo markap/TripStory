@@ -2,7 +2,6 @@
 
 
 import model
-from google.appengine.ext import ndb
 import hashtag
 
 
@@ -12,10 +11,20 @@ class Trip:
     @staticmethod
     def create(user, payload):
 
+        hashtags = set([])
+        hashtags = hashtags.union(hashtag.filter_hashtags(payload['name']))
+
+        for location in payload['locations']:
+            print hashtag.filter_hashtags(location['description'])
+            hashtags = hashtags.union(hashtag.filter_hashtags(location['description']))
+
+
+
+
         obj = model.Trip()
         obj.user = user.key
         obj.name = payload['name']
-        obj.hashtags = hashtag.filter_hashtags(payload['name'])
+        obj.hashtags = list(hashtags)
         obj.locations = payload['locations']
         obj.put()
         return obj

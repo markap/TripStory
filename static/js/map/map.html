@@ -10,8 +10,8 @@
         <form role="form" ng-controller="MapController as mapCtr" novalidate>
             <div class="row">
                 <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="Describe your trip"
-                            ng-model="trip.name" required autofocus>
+                        <textarea rows="2" type="text" class="form-control" placeholder="Describe your trip"
+                            ng-model="trip.name" required autofocus></textarea>
                         <input id="pac-input" class="controls" type="text" placeholder="Search Box">
                         <div id="map"></div>
 

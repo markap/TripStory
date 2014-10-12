@@ -145,6 +145,15 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
       return $sce.trustAsHtml(outArr.join(' '));
     };
 
+    this.getDescription = function(index) {
+    console.log('index');
+      console.log(index);
+      var locationIndex = 'position' in $scope.trips[index]
+                            ? $scope.trips[index]['position'] : 0;
+      var desc = $scope.trips[index]['locations'][locationIndex]['description'];
+      return this.hashTagUrl(desc);
+    };
+
 
     $scope.populateMap = function(data) {
         var mapOptions = {
@@ -247,11 +256,12 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
                 $scope.displayLocationDeletePopup[alertId] === true;
     }
 
-    this.deleteLocation = function(trips, alertId, tripId) {
+    this.deleteLocation = function(alertId, tripId) {
 
       Backend.mapService().delete(tripId, function(data) {
         $scope.displayLocationDeletePopup[alertId] = false;
-        trips.splice(alertId, 1);
+        //trips.splice(alertId, 1);
+        $('#trip'+alertId).hide();
       }, function(err) {
         console.log(err);
       });
