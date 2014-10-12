@@ -11,4 +11,4 @@ class WebHandler(basecontroller.BaseHandler):
 class WebRedirectHandler(basecontroller.BaseHandler):
 
     def get(self):
-        self.redirect("http://tripstory-new.appspot.com/web/")
+        self.redirect("http://travelstoryme.appspot.com/web/")
