@@ -1,0 +1,82 @@
+        <ng-include src="'/static/js/includes/gallery.html'"></ng-include>
+
+         <div class="container">
+                <hr />
+                <div class="alert alert-block alert-error notification fade in"
+                    ng-show="storyCtr.displayDeleteLocationPopup()">
+                    <h6>Are you sure you want to delete this location?</h6>
+                    <div class="form-controls-alert">
+                        <a href="" class="btn" ng-click="storyCtr.showDeleteLocationPopup(false)">No</a>
+                        <a href="" class="btn btn-danger"
+                            ng-click="storyCtr.deleteLocation(trip.id)">Yes</a>
+                    </div>
+                </div><!-- end alert -->
+
+                <div class="container">
+                    <div>
+
+                        <span style="cursor: pointer;"
+                            ng-show="storyCtr.isMyStory()"
+                            ng-click="storyCtr.showDeleteLocationPopup(true)"
+                            class="pull-right glyphicon glyphicon-remove"></span>
+
+
+                        <h3 ng-click="storyCtr.showProfile(trip.user)"
+                            ng-show="$root.loggedIn"
+                            style="cursor: pointer;"><i class="fa fa-user"> </i><span style="margin-left:5px;"
+                            ng-bind="trip.user.username"></span></h3>
+
+                    </div>
+                    <p ng-bind="storyCtr.convertToDate(trip.created) | date:'MMMM d, y h:mm a'"></p>
+                    <i class="fa fa-share"></i><a href="#share/{{trip.id}}" target="_blank">Share this trip!</a>
+                    <span style="margin-left: 20px;" class="fb-share-button"
+                        data-layout="button" data-href="http://travelstory.me/#share/{{trip.id}}"></span>
+                </div>
+                <div class="col-sm-6">
+                    <div id="map" ></div>
+                    <blockquote>
+                        <span
+                            ng-click="storyCtr.giveLike(trip.id)"
+
+                            ng-class="{'glyphicon glyphicon-heart heart red-heart': storyCtr.hasLike(true),
+                                'glyphicon glyphicon-heart heart': storyCtr.hasLike(false)}">
+
+                        </span>
+                        <span ng-bind-html="storyCtr.showLikes()">
+
+                        </span>
+                    <p ng-show="{{trip.name}}" ng-bind-html="storyCtr.hashTagUrl(trip.name)" hashtagify></p>
+                    </blockquote>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="left-column">
+                            <p class="trip-description" ng-bind-html="storyCtr.getDescription()"></p>
+                        </div>
+
+                        <div ng-show="storyCtr.hasImage(0)" class="col-sm-4">
+                            <a href="{{ storyCtr.showImage(0) }}" data-gallery>
+                            <img
+                                ng-src="{{ storyCtr.showImage($0) }}"
+                                class="img-thumbnail">
+                            </a>
+                        </div>
+                        <div ng-show="storyCtr.hasImage(1)" class="col-sm-4" >
+                            <a href="{{ storyCtr.showImage(1) }}" data-gallery>
+                            <img
+                                ng-src="{{ storyCtr.showImage(1) }}"
+                                class="img-thumbnail">
+                            </a>
+                        </div>
+                        <div ng-show="storyCtr.hasImage(2)" class="col-sm-4" >
+                            <a href="{{ storyCtr.showImage(2) }}" data-gallery>
+                            <img
+                                ng-src="{{ storyCtr.showImage(2) }}"
+                                class="img-thumbnail">
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+        </div>

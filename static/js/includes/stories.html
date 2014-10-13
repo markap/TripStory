@@ -8,7 +8,7 @@
         </div>
 
 
-       <div class="row" ng-repeat="trip in trips" my-repeat-directive>
+       <div class="row" ng-repeat="trip in trips">
             <div id="trip{{$index}}">
                 <hr />
                 <div class="alert alert-block alert-error notification fade in"
@@ -37,56 +37,33 @@
 
                     </div>
                     <p ng-bind="dashboardCtr.convertToDate(trip.created) | date:'MMMM d, y h:mm a'"></p>
-                    <i class="fa fa-share"></i><a href="#share/{{trip.id}}" target="_blank">Share this trip!</a>
-                    <span style="margin-left: 20px;" class="fb-share-button"
-                        data-layout="button" data-href="http://travelstory.me/#share/{{trip.id}}"></span>
+
                 </div>
-                <div class="col-sm-6">
-                    <div id="map{{$index}}" ></div>
-                    <blockquote>
-                        <span
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="#story/{{trip.id}}">
+                            <img ng-src="{{ dashboardCtr.showStaticMap(trip.locations) }}" class="img-thumbnail" >
+                        </a>
+                    </div>
+                    <div class="col-md-9">
+                        <blockquote>
+                                <p ng-show="trip.name" ng-bind-html="dashboardCtr.hashTagUrl(trip.name)" hashtagify></p>
+                                <a href="#story/{{trip.id}}"
+                                    class="btn btn-custom"><span class="glyphicon glyphicon-map-marker"></span>Show on interactive map</a>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="container">
+                    <span
                             ng-click="dashboardCtr.giveLike(trip.id, $index)"
 
                             ng-class="{'glyphicon glyphicon-heart heart red-heart': dashboardCtr.hasLike(true, $index),
                                 'glyphicon glyphicon-heart heart': dashboardCtr.hasLike(false, $index)}">
 
-                        </span>
-                        <span ng-bind-html="dashboardCtr.showLikes($index)">
-
-                        </span>
-                    <p ng-show="{{trip.name}}" ng-bind-html="dashboardCtr.hashTagUrl(trip.name)" hashtagify></p>
-                    </blockquote>
+                    </span>
+                    <span ng-bind-html="dashboardCtr.showLikes($index)"></span>
                 </div>
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="left-column">
-                            <p class="trip-description" ng-bind-html="dashboardCtr.getDescription($index)"></p>
-                        </div>
 
-                        <div ng-show="dashboardCtr.hasImage($index, 0)" class="col-sm-4">
-                            <a href="{{ dashboardCtr.showImage($index, 0) }}" data-gallery>
-                            <img
-                                ng-src="{{ dashboardCtr.showImage($index, 0) }}"
-                                class="img-thumbnail">
-                            </a>
-                        </div>
-                        <div ng-show="dashboardCtr.hasImage({{$index}}, 1)" class="col-sm-4" >
-                            <a href="{{ dashboardCtr.showImage($index, 1) }}" data-gallery>
-                            <img
-                                ng-src="{{ dashboardCtr.showImage($index, 1) }}"
-                                class="img-thumbnail">
-                            </a>
-                        </div>
-                        <div ng-show="dashboardCtr.hasImage({{$index}}, 2)" class="col-sm-4" >
-                            <a href="{{ dashboardCtr.showImage($index, 2) }}" data-gallery>
-                            <img
-                                ng-src="{{ dashboardCtr.showImage($index, 2) }}"
-                                class="img-thumbnail">
-                            </a>
-                        </div>
 
-                    </div>
-
-                </div>
             </div>
         </div>

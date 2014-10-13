@@ -74,7 +74,7 @@ angular.module('tripStoryApp.explore', ['ngRoute'])
           var locations = data.trips[j]['locations'][0];
 
           var content = "<div id='container'><blockquote>" + data.trips[j]['name']
-                        + "<br /><a style='margin-top: 5px;' href='#details/" + data.trips[j]['id']
+                        + "<br /><a style='margin-top: 5px;' href='#story/" + data.trips[j]['id']
                         + "' class='btn btn-custom'>Show me the story</button></blockquote></div>";
 
 

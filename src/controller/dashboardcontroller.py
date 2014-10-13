@@ -49,7 +49,7 @@ class DetailsHandler(basecontroller.BaseHandler):
         trip_data['user'] = user.User.as_dict(trip_obj.user.get())
 
         return {
-            'trips': [trip_data]
+            'trip': trip_data
         }
 
 
