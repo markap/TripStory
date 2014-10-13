@@ -1,4 +1,20 @@
         <ng-include src="'/static/js/includes/gallery.html'"></ng-include>
+        <div ng-show="$root.loggedIn" class="jumbotron jumbotron-ad hidden-print">
+          <div class="container">
+            <p>Give a heart when you like a story<i style="margin-left: 5px;" class="fa fa-heart-o"></i></p>
+          </div>
+        </div>
+
+        <div ng-hide="$root.loggedIn" class="jumbotron jumbotron-ad hidden-print">
+        <div class="container">
+        <p>Explore more - Sign in and become a beta tester
+            <a href="#register" class="btn btn-danger btn-lg">
+                <i class="fa fa-heart-o"></i>Sign in
+            </a>
+        </p>
+        </div>
+        </div>
+
 
          <div class="container">
                 <hr />
@@ -49,33 +65,44 @@
                     </blockquote>
                 </div>
                 <div class="col-sm-6">
+
+                <div ng-show="trip.locations.length > 0" style="margin-bottom: 5px;" class="btn-group">
+                        <button type="button" class="btn btn-default"
+                            ng-bind="storyCtr.navbarIndex($index)"
+                            ng-class="{active:storyCtr.navbarActive($index)}"
+                            ng-click="storyCtr.navbarClick($index)"
+                            ng-repeat="location in trip.locations"></button>
+                    </div>
                     <div class="row">
-                        <div class="left-column">
-                            <p class="trip-description" ng-bind-html="storyCtr.getDescription()"></p>
-                        </div>
+                      <div ng-repeat="location in trip.locations">
+                        <div  ng-show="storyCtr.showStory($index)">
+                            <div class="left-column">
+                                <p class="trip-description" ng-bind-html="location.description"></p>
+                            </div>
 
-                        <div ng-show="storyCtr.hasImage(0)" class="col-sm-4">
-                            <a href="{{ storyCtr.showImage(0) }}" data-gallery>
-                            <img
-                                ng-src="{{ storyCtr.showImage(0) }}"
-                                class="img-thumbnail">
-                            </a>
+                            <div ng-show="location.images[0]" class="col-sm-4">
+                                <a href="{{ storyCtr.showImage(location.images, 0) }}" data-gallery>
+                                <img
+                                    ng-src="{{ storyCtr.showImage(location.images, 0) }}"
+                                    class="img-thumbnail">
+                                </a>
+                            </div>
+                            <div ng-show="location.images[1]" class="col-sm-4" >
+                                <a href="{{ storyCtr.showImage(location.images, 1) }}" data-gallery>
+                                <img
+                                    ng-src="{{ storyCtr.showImage(location.images, 1) }}"
+                                    class="img-thumbnail">
+                                </a>
+                            </div>
+                            <div ng-show="location.images[2]" class="col-sm-4" >
+                                <a href="{{ storyCtr.showImage(location.images, 2) }}" data-gallery>
+                                <img
+                                    ng-src="{{ storyCtr.showImage(location.images, 2) }}"
+                                    class="img-thumbnail">
+                                </a>
+                            </div>
                         </div>
-                        <div ng-show="storyCtr.hasImage(1)" class="col-sm-4" >
-                            <a href="{{ storyCtr.showImage(1) }}" data-gallery>
-                            <img
-                                ng-src="{{ storyCtr.showImage(1) }}"
-                                class="img-thumbnail">
-                            </a>
-                        </div>
-                        <div ng-show="storyCtr.hasImage(2)" class="col-sm-4" >
-                            <a href="{{ storyCtr.showImage(2) }}" data-gallery>
-                            <img
-                                ng-src="{{ storyCtr.showImage(2) }}"
-                                class="img-thumbnail">
-                            </a>
-                        </div>
-
+                      </div>
                     </div>
 
                 </div>

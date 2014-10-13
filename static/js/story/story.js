@@ -8,6 +8,11 @@ angular.module('tripStoryApp.story', ['ngRoute'])
     templateUrl: '/static/js/story/story.html',
     controller: 'StoryController as storyCtr'
   });
+  $routeProvider.when('/share/:tripId', {
+    templateUrl: '/static/js/story/story.html',
+    controller: 'StoryController as storyCtr'
+  });
+
 }])
 
 
@@ -15,20 +20,39 @@ angular.module('tripStoryApp.story', ['ngRoute'])
         '$sce', '$routeParams', '$timeout',
         function($scope, $location, Backend, $rootScope, $sce, $routeParams, $timeout) {
 
+
     $scope.trip = null;
     $scope.displayLocationDeletePopup = false;
     $scope.isMyStory = false;
 
-    Backend.dashboardService().getDetails($routeParams.tripId, function(data) {
-      $scope.trip = data.trip;
+    if ($location.path().indexOf('/share') === 0) {
+        $rootScope.loggedIn = false;
+        Backend.dashboardService().getForShare($routeParams.tripId, function(data) {
 
-      $scope.isMyStory = $rootScope.loggedIn && data.trip.user.id === $rootScope.user.id;
+          $scope.trip = data.trip;
+          $scope.trip.position = 0;
 
-      $scope.populateMap(data);
-    },
-    function(err) {
-      console.log(err);
-    });
+          $scope.isMyStory = false;
+
+          $scope.populateMap(data);
+        },
+        function(err) {
+          console.log(err);
+        });
+    } else {
+        Backend.dashboardService().getDetails($routeParams.tripId, function(data) {
+
+          $scope.trip = data.trip;
+          $scope.trip.position = 0;
+
+          $scope.isMyStory = $rootScope.loggedIn && data.trip.user.id === $rootScope.user.id;
+
+          $scope.populateMap(data);
+        },
+        function(err) {
+          console.log(err);
+        });
+    }
 
 
 
@@ -62,18 +86,11 @@ angular.module('tripStoryApp.story', ['ngRoute'])
     };
 
 
-
-    this.hasImage = function(imageId) {
-
-      return $scope.trip &&
-                imageId in $scope.trip['locations'][$scope.trip['position']]['images'];
-    };
-
-    this.showImage = function(imageId) {
-      if (!this.hasImage(imageId)) {
+    this.showImage = function(images, imageId) {
+      if (!(imageId in images)) {
         return;
       }
-      return '/api/img/' + $scope.trip['locations'][$scope.trip['position']]['images'][imageId]
+      return '/api/img/' + images[imageId]
     };
 
     this.convertToDate = function(date) {
@@ -108,6 +125,9 @@ angular.module('tripStoryApp.story', ['ngRoute'])
       return this.hashTagUrl(desc);
     };
 
+    var markers = [];
+    var activeMarkerIcon = "/static/assets/star-active.png";
+    var inactiveMarkerIcon = "/static/assets/star-inactive.png";
 
     $scope.populateMap = function() {
 
@@ -122,14 +142,12 @@ angular.module('tripStoryApp.story', ['ngRoute'])
 
       var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-      $scope.trip['position'] = 0;
 
 
-      var markers = [];
+
+
       var bounds = new google.maps.LatLngBounds();
 
-      var activeMarkerIcon = "/static/assets/star-active.png";
-      var inactiveMarkerIcon = "/static/assets/star-inactive.png";
 
       var previousMarker = null;
 
@@ -179,6 +197,10 @@ angular.module('tripStoryApp.story', ['ngRoute'])
       return $scope.isMyStory;
     };
 
+    this.showStory = function($index) {
+      return $scope.trip.position === $index;
+    };
+
     this.showDeleteLocationPopup = function(show) {
       $scope.displayLocationDeletePopup = show;
     };
@@ -197,6 +219,25 @@ angular.module('tripStoryApp.story', ['ngRoute'])
 
     };
 
+    this.navbarIndex = function($index) {
+      return $index + 1;
+    };
+
+    this.navbarClick = function($index) {
+
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setIcon(inactiveMarkerIcon);
+        }
+        markers[$index].setIcon(activeMarkerIcon);
+
+        $scope.trip['position'] = $index;
+    };
+
+    this.navbarActive = function($index) {
+
+      return $index === $scope.trip.position;
+    };
+
 
     this.showProfile = function(user) {
       if (this.isMyStory(user)) {
@@ -208,9 +249,10 @@ angular.module('tripStoryApp.story', ['ngRoute'])
 
 
     this.hasLike = function(expectsLike) {
-      if (!$scope.trip) {
+      if (!$rootScope.loggedIn || !$scope.trip) {
           return false;
       }
+
 
       if ($rootScope.user.id in $scope.trip['likes']) {
           return expectsLike;

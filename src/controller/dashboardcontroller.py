@@ -89,5 +89,5 @@ class ShareHandler(basecontroller.BaseHandler):
 
 
         return {
-            'trips': [trip.Trip.as_share_dict(trip_obj)]
+            'trip': trip.Trip.as_share_dict(trip_obj)
         }

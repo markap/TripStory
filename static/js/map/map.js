@@ -22,6 +22,12 @@ angular.module('tripStoryApp.map', ['ngRoute'])
       locations: []
     };
 
+    /**
+    $(window).bind('beforeunload', function(){
+        return 'false';
+    });
+    */
+
 
     var mapOptions = {
         zoom: 4,
@@ -109,6 +115,8 @@ angular.module('tripStoryApp.map', ['ngRoute'])
         destination: destination,
         travelMode: travelMode
       };
+
+      console.log(request);
 
       var me = this;
 

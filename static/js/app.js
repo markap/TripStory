@@ -13,7 +13,6 @@ var tripStoryApp = angular.module('tripStoryApp', [
   'tripStoryApp.map',
   'tripStoryApp.hashtag',
   'tripStoryApp.profile',
-  'tripStoryApp.share',
   'tripStoryApp.explore',
   'tripStoryApp.exploreprofile',
   'tripStoryApp.explorehashtag',
@@ -47,7 +46,6 @@ tripStoryApp.controller('MainController', ['$rootScope', '$location', 'Backend',
             path.indexOf('/register') === 0 ||
             path.indexOf('/login') === 0;
       };
-
 
 
 
