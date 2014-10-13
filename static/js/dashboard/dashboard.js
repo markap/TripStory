@@ -186,7 +186,8 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
     };
 
     this.showStaticMap = function(locations) {
-        var url = "http://maps.googleapis.com/maps/api/staticmap?center=" +
+
+        var url = "https://maps.googleapis.com/maps/api/staticmap?center=" +
                 locations[0].lat + "," +
                 locations[1].lng + "&zoom=4&size=300x300&maptype=roadmap&sensor=false";
 

@@ -9,6 +9,7 @@
         <form role="form" novalidate>
             <div class="row">
                 <div class="col-sm-6">
+
                         <textarea rows="2" type="text" class="form-control" placeholder="Describe your trip"
                             ng-model="trip.name" required autofocus></textarea>
                         <input id="pac-input" class="controls" type="text" placeholder="Search Box">
@@ -24,20 +25,54 @@
 
                 </div>
                 <div class="col-sm-6">
+
+                    <div ng-show="trip.locations.length > 0" style="margin-bottom: 5px;" class="btn-group">
+                        <button type="button" class="btn btn-default"
+                            ng-bind="mapCtr.navbarIndex($index)"
+                            ng-class="{active:mapCtr.navbarActive($index)}"
+                            ng-click="mapCtr.navbarClick($index)"
+                            ng-repeat="location in trip.locations"></button>
+                    </div>
+
+                    <div class="alert alert-success" role="alert"
+                        ng-show="mapCtr.showHint()"
+                        style="padding: 25px;" ><span class="glyphicon glyphicon-flag"></span>
+                        Click on the map to add a new location</div>
+
+
                   <div class="left-column">
                     <textarea ng-show="mapCtr.showDeleteButton()"
                         style="margin-bottom:5px"
-                        ng-change="mapCtr.updateDescription(trip)"
-                        class="form-control" rows="4" ng-model="trip.description"
+                        ng-change="mapCtr.updateDescription(trip.description)"
+                        class="form-control" rows="6" ng-model="trip.description"
                         placeholder="Describe this location"></textarea>
+
+
                     <button type="from-control button"
-                        class="btn btn-custom"
+                        class="btn btn-custom btn-lg"
                         ng-show="mapCtr.showSaveButton()"
                         ng-click="mapCtr.saveLocation(trip)">
                         <span class="glyphicon glyphicon-pushpin"></span>
                         Pin this location</button>
 
 
+
+
+                        <button type="form-control button"
+                            class="btn btn-custom"
+                            ng-show="mapCtr.showDeleteButton()"
+                            ng-click="mapCtr.nextLocation()">
+
+                            <span class="glyphicon glyphicon-pushpin"></span>Next location
+                        </button>
+
+                         <button type="form-control button"
+                            class="btn btn-custom"
+                            ng-show="mapCtr.showDeleteButton()"
+                            ng-click="mapCtr.deleteLocation()">
+
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
 
                         <button
                           ng-show="mapCtr.showDeleteButton()"
@@ -48,14 +83,6 @@
                           on-error="mapCtr.onImageUploadError(response)"
                           on-success="mapCtr.onImageUploadSuccess(response)">
                           Add up to 3 images for each location
-                        </button>
-
-                        <button type="form-control button"
-                            class="btn btn-custom"
-                            ng-show="mapCtr.showDeleteButton()"
-                            ng-click="mapCtr.deleteLocation()">
-
-                            <span class="glyphicon glyphicon-trash"></span>
                         </button>
 
                   </div>

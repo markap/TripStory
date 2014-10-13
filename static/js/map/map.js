@@ -14,12 +14,14 @@ angular.module('tripStoryApp.map', ['ngRoute'])
         '$timeout',
         function($scope, $location, Backend, $rootScope, $timeout) {
 
-    var data = [];
-    $scope.currentPosition = -1;
     $scope.trip = {
       name: '',
-      description: ''
+      currentPosition: -1,
+      description: '',
+      currentMarker: null,
+      locations: []
     };
+
 
     var mapOptions = {
         zoom: 4,
@@ -29,8 +31,6 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
     var directionsService = new google.maps.DirectionsService();
     var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-    $scope.currentMarker = null;
 
     // Create the search box and link it to the UI element.
     var input = /** @type {HTMLInputElement} */(
@@ -46,23 +46,21 @@ angular.module('tripStoryApp.map', ['ngRoute'])
         var places = searchBox.getPlaces();
         console.log(places);
 
-        $scope.currentPosition = -1;
-        $scope.trip.description = '';
-
+        $scope.trip.currentPosition = -1;
         $scope.setMarkersInactive();
 
         if (places.length == 0) {
           return;
         }
 
-        if ($scope.currentMarker) {
-            $scope.currentMarker.setMap(null);
+        if ($scope.trip.currentMarker) {
+            $scope.trip.currentMarker.setMap(null);
         }
 
         var bounds = new google.maps.LatLngBounds();
 
-        // Create a marker for each place.
-        $scope.currentMarker = new google.maps.Marker({
+        // Create a marker for the place.
+        $scope.trip.currentMarker = new google.maps.Marker({
             map: map,
             title: places[0].name,
             position: places[0].geometry.location
@@ -102,23 +100,29 @@ angular.module('tripStoryApp.map', ['ngRoute'])
       suppressMarkers: true
     }
 
-    this.calculateRoute = function(origin, destination, position) {
-      console.log('here we go');
-      console.log(origin);
-      console.log(destination);
+    this.calculateRoute = function(origin, destination, position, travelMode) {
+
+      travelMode = typeof travelMode !== 'undefined' ? travelMode : google.maps.TravelMode.DRIVING;
+
       var request = {
         origin: origin,
         destination: destination,
-        travelMode: google.maps.TravelMode.DRIVING
+        travelMode: travelMode
       };
 
+      var me = this;
 
       directionsService.route(request, function(response, status) {
+          console.log('dir service');
+          console.log(response);
+          console.log(status);
         if (status == google.maps.DirectionsStatus.OK) {
           var renderer = new google.maps.DirectionsRenderer(rendererOptions);
           renderer.setDirections(response);
-          data[position]['renderer'] = renderer;
+          $scope.trip.locations[position]['renderer'] = renderer;
         }
+
+
       });
 
     };
@@ -126,8 +130,9 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
 
     $scope.setMarkersInactive = function() {
-       for (var i = 0; i < data.length; i++) {
-          data[i].marker.setIcon(inactiveMarkerIcon);
+       var locations = $scope.trip.locations;
+       for (var i = 0; i < locations.length; i++) {
+          locations[i].marker.setIcon(inactiveMarkerIcon);
       }
     };
 
@@ -135,20 +140,20 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
     google.maps.event.addListener(map, 'click', function(e) {
 
-      $scope.currentPosition = -1;
+      $scope.trip.currentPosition = -1;
       $scope.trip.description = '';
+
 
       $scope.setMarkersInactive();
 
 
-      if ($scope.currentMarker) {
-          $scope.currentMarker.setMap(null);
+      if ($scope.trip.currentMarker) {
+          $scope.trip.currentMarker.setMap(null);
       }
 
-      $scope.currentMarker = new google.maps.Marker({
+      $scope.trip.currentMarker = new google.maps.Marker({
         position: e.latLng,
-        map: map,
-        title: ''
+        map: map
       });
       $scope.$apply();
     });
@@ -156,63 +161,69 @@ angular.module('tripStoryApp.map', ['ngRoute'])
     var activeMarkerIcon = "/static/assets/star-active.png";
     var inactiveMarkerIcon = "/static/assets/star-inactive.png";
 
+
     this.saveLocation = function(trip) {
 
-      console.log(trip);
 
-
-      if ($scope.currentMarker) {
-        $scope.currentMarker.setMap(null);
+      if ($scope.trip.currentMarker) {
+        $scope.trip.currentMarker.setMap(null);
 
 
         var fixedMarker = new google.maps.Marker({
-          position: $scope.currentMarker.position,
+          position: $scope.trip.currentMarker.position,
           map: map,
-          icon: activeMarkerIcon,
-          id: data.length
+          icon: activeMarkerIcon
         });
-        $scope.currentMarker = null;
+        $scope.trip.currentMarker = null;
 
         // calculate route btw new and previous marker
-        if (data.length > 0) {
-            var previousPosition = data[data.length-1]['marker'].position;
+        var locations = $scope.trip.locations;
+        if (locations.length > 0) {
+            var previousPosition = locations[locations.length-1]['marker'].position;
             var currentPosition = fixedMarker.position;
 
-            this.calculateRoute(previousPosition, currentPosition, data.length-1);
+            this.calculateRoute(previousPosition, currentPosition, locations.length-1);
         }
-        data.push({
+
+
+        locations.push({
           'marker': fixedMarker,
           'description': trip.description,
           'images': []
         });
 
+        console.log("save");
+        console.log(locations);
 
-        $scope.currentPosition = data.length-1;
+
+        $scope.trip.currentPosition = locations.length-1;
 
         google.maps.event.addListener(fixedMarker, 'click', (function(m) {
           return function() {
-            var poi = null;
-            var position = -1;
-            console.log(m.id);
-            for (var i = 0; i < data.length; i++) {
-              console.log(data[i].id);
-              if (data[i]['marker'].id === m.id) {
-                  poi = data[i];
-                  position = i;
+
+            var locations = $scope.trip.locations;
+            console.log(locations);
+
+            var newPosition = -1;
+
+            for (var i = 0; i < locations.length; i++) {
+
+              if (locations[i]['marker'] === m) {
+                  newPosition = i;
                   break;
               }
             }
 
-            if ($scope.currentMarker) {
-                $scope.currentMarker.setMap(null);
-                $scope.currentMarker = null;
+            if ($scope.trip.currentMarker) {
+                $scope.trip.currentMarker.setMap(null);
+                $scope.trip.currentMarker = null;
             };
 
             $scope.setMarkersInactive();
             m.setIcon(activeMarkerIcon);
 
-            $scope.trip.description = poi['description'];
-            $scope.currentPosition = position;
+            $scope.trip.currentPosition = newPosition;
+            $scope.trip.description = locations[newPosition].description;
             $scope.$apply();
           };
         })(fixedMarker));
@@ -222,43 +233,82 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
     this.deleteLocation = function() {
 
+      var locations = $scope.trip.locations;
+      var location = locations[$scope.trip.currentPosition];
       // delete the marker first
-      data[$scope.currentPosition]['marker'].setMap(null);
+      location['marker'].setMap(null);
 
       // if there are routes, delete the routes
-      if (data[$scope.currentPosition].hasOwnProperty('renderer')) {
-        data[$scope.currentPosition]['renderer'].setMap(null);
+      if (location.hasOwnProperty('renderer')) {
+        location['renderer'].setMap(null);
       }
-      if ($scope.currentPosition-1 >= 0 &&
-          data[$scope.currentPosition-1].hasOwnProperty('renderer')) {
-        data[$scope.currentPosition-1]['renderer'].setMap(null);
+      if ($scope.trip.currentPosition-1 >= 0 &&
+          locations[$scope.trip.currentPosition-1].hasOwnProperty('renderer')) {
+        locations[$scope.trip.currentPosition-1]['renderer'].setMap(null);
       }
 
-      data.splice($scope.currentPosition, 1);
-      if (data.length > 0) {
-        var previousPosition = $scope.currentPosition;
-        $scope.currentPosition = previousPosition > 0 ? previousPosition -1 : previousPosition;
-        $scope.trip.description = data[$scope.currentPosition]['description'];
+      locations.splice($scope.trip.currentPosition, 1);
+
+      if (locations.length > 0) {
+        var previousPosition = $scope.trip.currentPosition;
+        $scope.trip.currentPosition = previousPosition > 0 ? previousPosition -1 : previousPosition;
+        $scope.trip.description = locations[$scope.trip.currentPosition]['description'];
+        locations[$scope.trip.currentPosition].marker.setIcon(activeMarkerIcon);
 
         // recalulate route
-        if (data.length > 1 && $scope.currentPosition < data.length-1) {
-          this.calculateRoute(data[$scope.currentPosition]['marker'].position,
-            data[$scope.currentPosition+1]['marker'].position, $scope.currentPosition);
+        if (locations.length > 1 && $scope.trip.currentPosition < locations.length-1) {
+          this.calculateRoute(locations[$scope.trip.currentPosition]['marker'].position,
+            locations[$scope.trip.currentPosition+1]['marker'].position, $scope.trip.currentPosition);
         }
       }
 
     };
 
-    this.showDeleteButton = function() {
-      return $scope.currentPosition in data;
+
+    this.navbarIndex = function($index) {
+      return $index + 1;
     };
 
+    this.navbarClick = function($index) {
+        var location = $scope.trip.locations[$index];
+
+        if ($scope.trip.currentMarker) {
+            $scope.trip.currentMarker.setMap(null);
+            $scope.trip.currentMarker = null;
+        };
+
+        $scope.setMarkersInactive();
+        location['marker'].setIcon(activeMarkerIcon);
+
+        $scope.trip.currentPosition = $index;
+        $scope.trip.description = location.description;
+    };
+
+    this.navbarActive = function($index) {
+      return $index === $scope.trip.currentPosition;
+    };
+
+    this.nextLocation = function() {
+      $scope.trip.currentPosition = -1;
+
+      $scope.setMarkersInactive();
+    };
+
+    this.showDeleteButton = function() {
+      return $scope.trip.currentPosition in $scope.trip.locations;
+    };
+
+
+    this.showHint = function() {
+      return $scope.trip.currentPosition === -1 && $scope.trip.currentMarker === null;
+    }
+
     this.showSaveButton = function() {
-      return $scope.currentMarker !== null;
+      return $scope.trip.currentMarker !== null;
     };
 
     this.onImageUploadSuccess = function(response) {
-      data[$scope.currentPosition].images.push(response.data.key);
+      $scope.trip.locations[$scope.trip.currentPosition].images.push(response.data.key);
     };
 
     this.onImageUploadError = function(err) {
@@ -267,51 +317,51 @@ angular.module('tripStoryApp.map', ['ngRoute'])
     };
 
     this.deleteImage = function(position) {
-      data[$scope.currentPosition].images.splice(position, 1);
+      $scope.trip.locations[$scope.trip.currentPosition].images.splice(position, 1);
     };
 
     this.hasImage = function(index) {
-      console.log("has image at index " + index);
-      return $scope.currentPosition in data
-        && index in data[$scope.currentPosition].images;
+        var locations = $scope.trip.locations;
+        return $scope.trip.currentPosition in locations && index in locations[$scope.trip.currentPosition].images;
     };
 
     this.showImage = function(index) {
-      console.log('show image func for index ' + index);
-      console.log(this.hasImage(index));
+
       if (!this.hasImage(index)) {
           return;
       }
-      console.log("/api/img/" + data[$scope.currentPosition].images[index]);
-      return "/api/img/" + data[$scope.currentPosition].images[index];
+      var location = $scope.trip.locations[$scope.trip.currentPosition];
+      //console.log("/api/img/" + data[$scope.currentPosition].images[index]);
+      return "/api/img/" + location.images[index];
     };
 
-    this.updateDescription = function(trip) {
-      data[$scope.currentPosition].description = trip.description;
-
+    this.updateDescription = function(description) {
+      $scope.trip.locations[$scope.trip.currentPosition].description = description;
     };
+
 
     this.showSaveTripButton = function() {
-      return data.length > 0;
+      return $scope.trip.locations.length > 1;
     };
 
     this.saveTrip = function(name) {
-      if (data.length === 0) {
+      if ($scope.trip.locations.length < 2) {
           return;
       }
-      console.log(name);
-      console.log(data);
+
       var trip = {
         'name': name,
         'locations': []
       };
 
-      for (var i = 0; i < data.length; i++) {
+      var locations = $scope.trip.locations;
+
+      for (var i = 0; i < locations.length; i++) {
         var location = {
-          'description': data[i].description,
-          'lat': data[i]['marker'].position.lat(),
-          'lng': data[i]['marker'].position.lng(),
-          'images': data[i]['images']
+          'description': locations[i].description,
+          'lat': locations[i]['marker'].position.lat(),
+          'lng': locations[i]['marker'].position.lng(),
+          'images': locations[i]['images']
         };
         trip.locations.push(location);
       }
