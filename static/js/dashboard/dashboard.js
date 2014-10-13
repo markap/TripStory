@@ -166,8 +166,10 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
         var maps = [];
         var markers = [];
         var markerData = [];
+        var routesCount = 0;
 
         setTimeout(function(){
+
             for (var i = 0; i < data.trips.length; i++) {
               maps[i] = new google.maps.Map(document.getElementById('map' + i), mapOptions);
               markers[i] = [];
@@ -196,7 +198,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
                             position: new google.maps.LatLng(locations[j].lat, locations[j].lng),
                             map: maps[i],
                             icon: icon,
-                            title: 'Hello World!',
+                            title: locations[j]['description'],
                             id: {
                               'map': i,
                               'location': j
@@ -207,13 +209,14 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
 
                         if (previousMarker) {
-                            console.log("location is " + j);
+                            console.log("route count is " + routesCount);
+                            routesCount++;
                             $timeout((function(previous, current, map){
                                 return function() {
                                     $scope.calculateRoute(previous.position, current.position, map);
                                 };
                             }(previousMarker, currentMarker, maps[i]))
-                            , locations.length > 10 ? 400*j : 0);
+                            , routesCount > 10 ? 400*routesCount : 0);
                         }
 
                         google.maps.event.addListener(currentMarker, 'click', (function(m) {
