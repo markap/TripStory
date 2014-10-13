@@ -29,6 +29,7 @@ actions = [
     ('/api/map/upload', mapcontroller.ImageUploadHandler),
     ('/api/map/like', mapcontroller.LikeHandler),
 
+    ('/api/thumb/(.*)', imagehandler.Thumbnailer),
     ('/api/img/(.*)', imagehandler.ServeHandler)
 
 

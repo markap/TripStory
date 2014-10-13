@@ -85,6 +85,12 @@ angular.module('tripStoryApp.story', ['ngRoute'])
 
     };
 
+    this.showThumb = function(images, imageId) {
+      if (!(imageId in images)) {
+        return;
+      }
+      return '/api/thumb/' + images[imageId]
+    };
 
     this.showImage = function(images, imageId) {
       if (!(imageId in images)) {
