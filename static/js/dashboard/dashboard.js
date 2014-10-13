@@ -12,8 +12,8 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
 
 .controller('DashboardController', ['$scope', '$location', 'Backend', '$rootScope',
-        '$sce', '$routeParams',
-        function($scope, $location, Backend, $rootScope, $sce, $routeParams) {
+        '$sce', '$routeParams', '$timeout',
+        function($scope, $location, Backend, $rootScope, $sce, $routeParams, $timeout) {
 
     $scope.trips = [];
 
@@ -101,6 +101,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
 
       directionsService.route(request, function(response, status) {
+        console.log("status is " + status);
         if (status == google.maps.DirectionsStatus.OK) {
           var renderer = new google.maps.DirectionsRenderer(rendererOptions);
           renderer.setDirections(response);
@@ -186,8 +187,10 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
               var activeMarkerIcon = "/static/assets/star-active.png";
               var inactiveMarkerIcon = "/static/assets/star-inactive.png";
 
+
               for (var j = 0; j < locations.length; j++) {
                       var icon = (j === 0) ? activeMarkerIcon : inactiveMarkerIcon;
+
 
                       var currentMarker = new google.maps.Marker({
                             position: new google.maps.LatLng(locations[j].lat, locations[j].lng),
@@ -202,8 +205,15 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
                         bounds.extend(currentMarker.position);
                         markers[i].push(currentMarker);
 
+
                         if (previousMarker) {
-                            $scope.calculateRoute(previousMarker.position, currentMarker.position, maps[i]);
+                            console.log("location is " + j);
+                            $timeout((function(previous, current, map){
+                                return function() {
+                                    $scope.calculateRoute(previous.position, current.position, map);
+                                };
+                            }(previousMarker, currentMarker, maps[i]))
+                            , locations.length > 10 ? 400*j : 0);
                         }
 
                         google.maps.event.addListener(currentMarker, 'click', (function(m) {
@@ -232,6 +242,7 @@ angular.module('tripStoryApp.dashboard', ['ngRoute'])
 
               }
               maps[i].fitBounds(bounds);
+
             }
 
         }, 50);
