@@ -61,7 +61,7 @@
                         <span ng-bind-html="storyCtr.showLikes()">
 
                         </span>
-                    <p ng-show="{{trip.name}}" ng-bind-html="storyCtr.hashTagUrl(trip.name)" hashtagify></p>
+                    <p ng-bind-html="storyCtr.hashTagUrl(trip.name)" hashtagify></p>
                     </blockquote>
                 </div>
                 <div class="col-sm-6">
@@ -77,7 +77,7 @@
                       <div ng-repeat="location in trip.locations">
                         <div  ng-show="storyCtr.showStory($index)">
                             <div class="left-column">
-                                <p class="trip-description" ng-bind-html="location.description"></p>
+                                <p class="trip-description" ng-bind-html="storyCtr.hashTagUrl(location.description)"></p>
                             </div>
 
                             <div ng-show="location.images[0]" class="col-sm-4">
