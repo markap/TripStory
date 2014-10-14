@@ -47,6 +47,15 @@ tripStoryApp.controller('MainController', ['$rootScope', '$location', 'Backend',
             path.indexOf('/login') === 0;
       };
 
+      $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+
+        var path = $location.path();
+        console.log(oldUrl);
+        console.log(newUrl);
+        if (!$rootScope.loggedIn && oldUrl.indexOf('share') !== -1 && newUrl.indexOf('share') === -1) {
+            $location.path('register');
+        }
+      });
 
 
       this.showNavbar = function() {
