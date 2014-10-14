@@ -30,7 +30,7 @@ actions = [
     ('/api/map/like', mapcontroller.LikeHandler),
 
     ('/api/thumb/(.*)', imagehandler.Thumbnailer),
-    ('/api/img/(.*)', imagehandler.ServeHandler)
+    ('/api/img/(.*)', imagehandler.Img)
 
 
 

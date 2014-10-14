@@ -57,7 +57,7 @@ angular.module('tripStoryApp.explore', ['ngRoute'])
 
       var mapOptions = {
         zoom: 2,
-        center: new google.maps.LatLng(20, 20),
+        center: new google.maps.LatLng(-80, 40),
         mapTypeId: google.maps.MapTypeId.TERRAIN
       };
 

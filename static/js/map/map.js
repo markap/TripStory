@@ -11,8 +11,61 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 }])
 
 .controller('MapController', ['$scope', '$location', 'Backend', '$rootScope',
-        '$timeout',
-        function($scope, $location, Backend, $rootScope, $timeout) {
+        '$timeout', 'FileUploader',
+        function($scope, $location, Backend, $rootScope, $timeout, FileUploader) {
+
+
+    var uploader = $scope.uploader = new FileUploader({
+        url: '/api/map/upload',
+        autoUpload: true
+    });
+
+    uploader.filters.push({
+    name: 'imageFilter',
+        fn: function(item /*{File|FileLikeObject}*/, options) {
+            var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+            return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+    });
+
+
+    uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
+        console.info('onWhenAddingFileFailed', item, filter, options);
+    };
+    uploader.onAfterAddingFile = function(fileItem) {
+        console.info('onAfterAddingFile', fileItem);
+    };
+    uploader.onAfterAddingAll = function(addedFileItems) {
+        console.info('onAfterAddingAll', addedFileItems);
+    };
+    uploader.onBeforeUploadItem = function(item) {
+        if ($scope.trip.locations[$scope.trip.currentPosition].images.length > 2) {
+            uploader.cancelItem(item);
+        }
+        item.formData = {'position':$scope.trip.currentPosition};
+    };
+    uploader.onProgressItem = function(fileItem, progress) {
+        console.info('onProgressItem', fileItem, progress);
+    };
+    uploader.onProgressAll = function(progress) {
+        console.info('onProgressAll', progress);
+    };
+    uploader.onSuccessItem = function(fileItem, response, status, headers) {
+        $scope.trip.locations[fileItem.formData.position].images.push(response.key);
+        console.info('onSuccessItem', fileItem, response, status, headers);
+    };
+    uploader.onErrorItem = function(fileItem, response, status, headers) {
+        console.info('onErrorItem', fileItem, response, status, headers);
+    };
+    uploader.onCancelItem = function(fileItem, response, status, headers) {
+        console.info('onCancelItem', fileItem, response, status, headers);
+    };
+    uploader.onCompleteItem = function(fileItem, response, status, headers) {
+        console.info('onCompleteItem', fileItem, response, status, headers);
+    };
+    uploader.onCompleteAll = function() {
+        console.info('onCompleteAll');
+    };
 
     $scope.trip = {
       name: '',
@@ -46,9 +99,8 @@ angular.module('tripStoryApp.map', ['ngRoute'])
     var searchBox = new google.maps.places.SearchBox(
     /** @type {HTMLInputElement} */(input));
 
-    // Listen for the event fired when the user selects an item from the
-    // pick list. Retrieve the matching places for that item.
-    google.maps.event.addListener(searchBox, 'places_changed', function() {
+
+    $scope.showSearchBoxResult = function() {
         var places = searchBox.getPlaces();
         console.log(places);
 
@@ -88,6 +140,46 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
         $scope.$apply();
 
+    };
+
+
+    $('#pac-input').bind("enterKey",function(e){
+        $scope.showSearchBoxResult();
+    });
+    $('#pac-input').keyup(function(e){
+        if(e.keyCode == 13) {
+            $(this).trigger("enterKey");
+        }
+    });
+
+/**
+    $scope.$on('$locationChangeStart', function(event) {
+
+var r = confirm("You will lose all your progress\n\n Are you sure you want to leave this page?");
+window.onbeforeunload = null;
+if (r == true) {
+
+} else {
+    event.preventDefault();
+}
+    });
+
+    $(window).on('beforeunload', function(){
+      return 'You will lose all your progress';
+    });
+
+    $(window).on('unload', function() {
+      window.onbeforeunload = null;
+      //window.onbeforeunload = undefined;
+    });
+    */
+
+
+
+    // Listen for the event fired when the user selects an item from the
+    // pick list. Retrieve the matching places for that item.
+    google.maps.event.addListener(searchBox, 'places_changed', function() {
+        $scope.showSearchBoxResult();
     });
 
 
@@ -306,6 +398,16 @@ angular.module('tripStoryApp.map', ['ngRoute'])
       return $scope.trip.currentPosition in $scope.trip.locations;
     };
 
+    this.showDropZone = function(imageId) {
+      return !this.hasImage(imageId) && this.showDeleteButton();
+    };
+
+    this.disableFileUpload = function() {
+      var locations = $scope.trip.locations;
+      var currentPosition = $scope.trip.currentPosition;
+      return !(currentPosition in locations && locations[currentPosition].images.length < 3);
+    };
+
 
     this.showHint = function() {
       return $scope.trip.currentPosition === -1 && $scope.trip.currentMarker === null;
@@ -313,15 +415,6 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
     this.showSaveButton = function() {
       return $scope.trip.currentMarker !== null;
-    };
-
-    this.onImageUploadSuccess = function(response) {
-      $scope.trip.locations[$scope.trip.currentPosition].images.push(response.data.key);
-    };
-
-    this.onImageUploadError = function(err) {
-      console.log("erro");
-      console.log(err);
     };
 
     this.deleteImage = function(position) {
@@ -339,7 +432,7 @@ angular.module('tripStoryApp.map', ['ngRoute'])
           return;
       }
       var location = $scope.trip.locations[$scope.trip.currentPosition];
-      //console.log("/api/img/" + data[$scope.currentPosition].images[index]);
+      //console.log("/api/thumb/" + data[$scope.currentPosition].images[index]);
       return "/api/img/" + location.images[index];
     };
 
