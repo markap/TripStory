@@ -6,7 +6,6 @@ var tripStoryApp = angular.module('tripStoryApp', [
   'ngSanitize',
   'backendServices',
   'angularFileUpload',
-  'hashtagify',
    'xeditable',
   'tripStoryApp.login',
   'tripStoryApp.register',

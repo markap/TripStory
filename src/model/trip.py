@@ -11,23 +11,38 @@ class Trip:
     @staticmethod
     def create(user, payload):
 
-        hashtags = set([])
-        hashtags = hashtags.union(hashtag.filter_hashtags(payload['name']))
-
-        for location in payload['locations']:
-            print hashtag.filter_hashtags(location['description'])
-            hashtags = hashtags.union(hashtag.filter_hashtags(location['description']))
-
-
-
-
         obj = model.Trip()
         obj.user = user.key
         obj.name = payload['name']
-        obj.hashtags = list(hashtags)
+        obj.hashtags = Trip.get_hashtags(payload['name'], payload['locations'])
         obj.locations = payload['locations']
         obj.put()
         return obj
+
+
+    @staticmethod
+    def get_hashtags(name, locations):
+        hashtags = set([])
+        hashtags = hashtags.union(hashtag.filter_hashtags(name))
+
+        for location in locations:
+            hashtags = hashtags.union(hashtag.filter_hashtags(location['description']))
+
+        return list(hashtags)
+
+
+    @staticmethod
+    def update_name(trip_obj, name):
+        trip_obj.name = name
+        trip_obj.hashtags = Trip.get_hashtags(name, trip_obj.locations)
+        trip_obj.put()
+
+    @staticmethod
+    def update_description(trip_obj, position, description):
+        trip_obj.locations[position]['description'] = description
+        trip_obj.hashtags = Trip.get_hashtags(trip_obj.name, trip_obj.locations)
+        trip_obj.put()
+
 
     @staticmethod
     def get():

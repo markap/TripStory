@@ -119,7 +119,7 @@ angular.module('tripStoryApp.story', ['ngRoute'])
         outArr.push(val);
       });
 
-      return $sce.trustAsHtml(outArr.join(' '));
+      return outArr.join(' ');
     };
 
     this.getDescription = function() {
@@ -226,12 +226,19 @@ angular.module('tripStoryApp.story', ['ngRoute'])
     };
 
     this.updateName = function(name) {
-      alert(name);
+      Backend.mapService().updateName($scope.trip.id, name, function(data) {
+      }, function(err){
+        console.log(err);
+      });
+
     };
 
 
     this.updateDescription = function(description, $index) {
-      alert(description + " at " + $index);
+      Backend.mapService().updateDescription($scope.trip.id, $index, description, function(data) {
+      }, function(err){
+        console.log(err);
+      });
     };
 
 

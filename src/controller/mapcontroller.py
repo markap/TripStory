@@ -47,6 +47,34 @@ class DeleteHandler(basecontroller.BaseHandler):
         return self.format_error("You are allowed to delete this item")
 
 
+class UpdateNameHandler(basecontroller.BaseHandler):
+    @decorator.json_out
+    @decorator.auth
+    def post(self):
+        payload = json.loads(self.request.body)
+        trip_obj = trip.Trip.get_by_id(payload['tripid'])
+
+
+        if (trip_obj.user == self.get_user().key):
+            trip.Trip.update_name(trip_obj, payload['name'])
+            return
+        return self.format_error("You are allowed to change the name")
+
+
+class UpdateDescriptionHandler(basecontroller.BaseHandler):
+    @decorator.json_out
+    @decorator.auth
+    def post(self):
+        payload = json.loads(self.request.body)
+        trip_obj = trip.Trip.get_by_id(payload['tripid'])
+
+
+        if (trip_obj.user == self.get_user().key):
+            trip.Trip.update_description(trip_obj, payload['position'], payload['description'])
+            return
+        return self.format_error("You are allowed to change the description")
+
+
 class LikeHandler(basecontroller.BaseHandler):
 
     @decorator.json_out

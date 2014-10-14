@@ -28,6 +28,8 @@ actions = [
     ('/api/map/delete', mapcontroller.DeleteHandler),
     ('/api/map/upload', mapcontroller.ImageUploadHandler),
     ('/api/map/like', mapcontroller.LikeHandler),
+    ('/api/map/update.name', mapcontroller.UpdateNameHandler),
+    ('/api/map/update.description', mapcontroller.UpdateDescriptionHandler),
 
     ('/api/thumb/(.*)', imagehandler.Thumbnailer),
     ('/api/img/(.*)', imagehandler.Img)

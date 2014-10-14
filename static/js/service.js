@@ -165,6 +165,37 @@ backendServices.factory('Backend', ['$resource',
                 success(data);
             }
           });
+        },
+        updateName: function(tripId, name, success, failure) {
+            return $resource('/api/map/update.name').save({
+              'tripid': tripId,
+              'name': name
+            }, function(data) {
+              if (data.hasOwnProperty('errors')) {
+
+                failure(data.errors);
+
+              } else {
+
+                success(data);
+              }
+            });
+        },
+        updateDescription: function(tripId, position, description, success, failure) {
+            return $resource('/api/map/update.description').save({
+              'tripid': tripId,
+              'position': position,
+              'description': description
+            }, function(data) {
+              if (data.hasOwnProperty('errors')) {
+
+                failure(data.errors);
+
+              } else {
+
+                success(data);
+              }
+            });
         }
       };
     };
