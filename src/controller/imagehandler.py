@@ -25,7 +25,7 @@ class Img(webapp2.RequestHandler):
 
             if blob_info:
                 img = images.Image(blob_key=blob_key)
-                img.resize(width=500, height=500)
+                img.resize(width=600, height=600)
                 img.im_feeling_lucky()
                 thumbnail = img.execute_transforms(output_encoding=images.JPEG)
 

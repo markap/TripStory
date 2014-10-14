@@ -45,6 +45,18 @@ class Trip:
 
 
     @staticmethod
+    def delete_image(trip_obj, position, image_id):
+        del trip_obj.locations[position]['images'][image_id]
+        trip_obj.put()
+
+    @staticmethod
+    def add_image(trip_obj, position, key):
+        trip_obj.locations[position]['images'].append(key)
+        trip_obj.put()
+
+
+
+    @staticmethod
     def get():
         return model.Trip.query(model.Trip.active == True).order(-model.Trip.created)
 

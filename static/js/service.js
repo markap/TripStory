@@ -196,6 +196,22 @@ backendServices.factory('Backend', ['$resource',
                 success(data);
               }
             });
+        },
+        deleteImage: function(tripId, position, imageId, success, failure) {
+            return $resource('/api/map/image.delete').save({
+              'tripid': tripId,
+              'position': position,
+              'imageid': imageId
+            }, function(data) {
+              if (data.hasOwnProperty('errors')) {
+
+                failure(data.errors);
+
+              } else {
+
+                success(data);
+              }
+            });
         }
       };
     };

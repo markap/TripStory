@@ -17,8 +17,63 @@ angular.module('tripStoryApp.story', ['ngRoute'])
 
 
 .controller('StoryController', ['$scope', '$location', 'Backend', '$rootScope',
-        '$sce', '$routeParams', '$timeout',
-        function($scope, $location, Backend, $rootScope, $sce, $routeParams, $timeout) {
+        '$sce', '$routeParams', '$timeout', 'FileUploader',
+        function($scope, $location, Backend, $rootScope, $sce, $routeParams, $timeout, FileUploader) {
+
+
+    var uploader = $scope.uploader = new FileUploader({
+        url: '/api/map/image.add',
+        autoUpload: true
+    });
+
+    uploader.filters.push({
+    name: 'imageFilter',
+        fn: function(item /*{File|FileLikeObject}*/, options) {
+            var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+            return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+    });
+
+
+    uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
+        console.info('onWhenAddingFileFailed', item, filter, options);
+    };
+    uploader.onAfterAddingFile = function(fileItem) {
+        console.info('onAfterAddingFile', fileItem);
+    };
+    uploader.onAfterAddingAll = function(addedFileItems) {
+        console.info('onAfterAddingAll', addedFileItems);
+    };
+    uploader.onBeforeUploadItem = function(item) {
+        if ($scope.trip.locations[$scope.trip.position].images.length > 2) {
+            item.cancel();
+        }
+        item.formData.push({'tripid': $scope.trip.id});
+        item.formData.push({'position':$scope.trip.position});
+
+    };
+    uploader.onProgressItem = function(fileItem, progress) {
+        console.info('onProgressItem', fileItem, progress);
+    };
+    uploader.onProgressAll = function(progress) {
+        console.info('onProgressAll', progress);
+    };
+    uploader.onSuccessItem = function(fileItem, response, status, headers) {
+        $scope.trip.locations[fileItem.formData[1].position].images.push(response.key);
+        console.info('onSuccessItem', fileItem, response, status, headers);
+    };
+    uploader.onErrorItem = function(fileItem, response, status, headers) {
+        console.info('onErrorItem', fileItem, response, status, headers);
+    };
+    uploader.onCancelItem = function(fileItem, response, status, headers) {
+        console.info('onCancelItem', fileItem, response, status, headers);
+    };
+    uploader.onCompleteItem = function(fileItem, response, status, headers) {
+        console.info('onCompleteItem', fileItem, response, status, headers);
+    };
+    uploader.onCompleteAll = function() {
+        console.info('onCompleteAll');
+    };
 
 
     $scope.trip = null;
@@ -99,8 +154,32 @@ angular.module('tripStoryApp.story', ['ngRoute'])
       return '/api/img/' + images[imageId]
     };
 
+    this.showDropZone = function(imageId) {
+      return !this.hasImage(imageId);
+    };
+
+
+    this.deleteImage = function($index, imageId) {
+      var response = confirm("Delete this image?");
+      if (response) {
+        $scope.trip.locations[$index].images.splice(imageId, 1);
+        Backend.mapService().deleteImage($scope.trip.id, $index, imageId, function(data) {
+        }, function(err) {
+           console.log(err);
+        });
+      }
+    };
+
+
+    this.disableFileUpload = function() {
+      var locations = $scope.trip.locations;
+      var currentPosition = $scope.trip.position;
+      return !(currentPosition in locations && locations[currentPosition].images.length < 3);
+    };
+
+
     this.convertToDate = function(date) {
-      return new Date(date);
+      return date ? new Date(date) : "";
     };
 
     this.hashTagUrl = function(words) {

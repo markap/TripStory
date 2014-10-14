@@ -266,6 +266,15 @@ p.editable-click:hover {
 }
 
 
+.parent-hover .child-hover {
+    display: none;
+}
+
+.parent-hover:hover .child-hover {
+    display: table;
+}
+
+
 .photo-wrapper {
     position: relative;
 

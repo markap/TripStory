@@ -104,32 +104,93 @@
                                 e-rows="4" e-cols="50" e-form="descBtnForm" editable-textarea="location.description"
                                     class="trip-description"
                                     ng-bind-html="storyCtr.hashTagUrl(location.description)"></p>
-
-
-
-
                             </div>
 
-                            <div ng-show="location.images[0]" class="col-sm-4">
-                                <a href="{{ storyCtr.showImage(location.images, 0) }}" data-gallery>
-                                <img
-                                    ng-src="{{ storyCtr.showThumb(location.images, 0) }}"
-                                    class="img-thumbnail">
-                                </a>
+                            <div class="container" style="margin-bottom:5px;" ng-show="storyCtr.isMyStory()">
+                                <input type="file" nv-file-select=""
+                                    ng-disabled="storyCtr.disableFileUpload()"
+                                    uploader="uploader" multiple  />
+                            </div>
+                            <div ng-hide="location.images[0] || !uploader.isHTML5 || !storyCtr.isMyStory()" class="col-sm-4">
+                                <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                                    Image 1
+                                </div>
+                            </div>
+                            <div ng-show="location.images[0]" class="col-sm-4" >
+                                    <div class="photo-wrapper">
+                                        <div class="parent-hover photo">
+                                                <a href="{{ storyCtr.showImage(location.images, 0) }}" data-gallery>
+                                            <img
+                                                ng-src="{{ storyCtr.showThumb(location.images, 0) }}"
+                                                class="img-thumbnail">
+                                            </a>
+
+
+                                            <span
+                                                ng-show="storyCtr.isMyStory()"
+                                                ng-click="storyCtr.deleteImage($index, 0)"
+                                                class="child-hover label label-inverse photo-label">
+                                                <button type="form-control button" class="btn btn-black">
+                                                <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                                </button>
+                                            </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-hide="location.images[1] || !uploader.isHTML5 || !storyCtr.isMyStory()" class="col-sm-4">
+                                <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                                    Image 2
+                                </div>
                             </div>
                             <div ng-show="location.images[1]" class="col-sm-4" >
-                                <a href="{{ storyCtr.showImage(location.images, 1) }}" data-gallery>
-                                <img
-                                    ng-src="{{ storyCtr.showThumb(location.images, 1) }}"
-                                    class="img-thumbnail">
-                                </a>
+                                    <div class="photo-wrapper">
+                                        <div class="parent-hover photo">
+                                                <a href="{{ storyCtr.showImage(location.images, 1) }}" data-gallery>
+                                            <img
+                                                ng-src="{{ storyCtr.showThumb(location.images, 1) }}"
+                                                class="img-thumbnail">
+                                            </a>
+
+
+                                            <span
+                                                ng-show="storyCtr.isMyStory()"
+                                                ng-click="storyCtr.deleteImage($index, 1)"
+                                                class="child-hover label label-inverse photo-label">
+                                                <button type="form-control button" class="btn btn-black">
+                                                <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                                </button>
+                                            </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-hide="location.images[2] || !uploader.isHTML5 || !storyCtr.isMyStory()" class="col-sm-4">
+                                <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                                    Image 3
+                                </div>
                             </div>
                             <div ng-show="location.images[2]" class="col-sm-4" >
-                                <a href="{{ storyCtr.showImage(location.images, 2) }}" data-gallery>
-                                <img
-                                    ng-src="{{ storyCtr.showThumb(location.images, 2) }}"
-                                    class="img-thumbnail">
-                                </a>
+                                    <div class="photo-wrapper">
+                                        <div class="parent-hover photo">
+                                                <a href="{{ storyCtr.showImage(location.images, 2) }}" data-gallery>
+                                            <img
+                                                ng-src="{{ storyCtr.showThumb(location.images, 2) }}"
+                                                class="img-thumbnail">
+                                            </a>
+
+
+                                            <span
+                                                ng-show="storyCtr.isMyStory()"
+                                                ng-click="storyCtr.deleteImage($index, 2)"
+                                                class="child-hover label label-inverse photo-label">
+                                                <button type="form-control button" class="btn btn-black">
+                                                <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                                </button>
+                                            </span>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                       </div>
