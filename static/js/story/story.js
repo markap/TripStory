@@ -225,6 +225,16 @@ angular.module('tripStoryApp.story', ['ngRoute'])
 
     };
 
+    this.updateName = function(name) {
+      alert(name);
+    };
+
+
+    this.updateDescription = function(description, $index) {
+      alert(description + " at " + $index);
+    };
+
+
     this.navbarIndex = function($index) {
       return $index + 1;
     };

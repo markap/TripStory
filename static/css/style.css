@@ -256,6 +256,15 @@ fieldset[disabled] .btn-black.active {
 .another-file-over-class { border: dotted 3px green; }
 
 
+p.editable-click {
+    color: green;
+    border-bottom: dotted 2px green;
+}
+p.editable-click:hover {
+    color: #47a447;
+    border-bottom-color: #47a447;
+}
+
 
 .photo-wrapper {
     position: relative;

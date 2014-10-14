@@ -7,6 +7,7 @@ var tripStoryApp = angular.module('tripStoryApp', [
   'backendServices',
   'angularFileUpload',
   'hashtagify',
+   'xeditable',
   'tripStoryApp.login',
   'tripStoryApp.register',
   'tripStoryApp.dashboard',
@@ -22,12 +23,20 @@ var tripStoryApp = angular.module('tripStoryApp', [
 tripStoryApp.config(['$routeProvider',
         function($routeProvider) {
 
+
+
     $routeProvider.when('/about', {
         templateUrl: '/static/js/includes/about.html',
 
     });
     $routeProvider.otherwise({redirectTo: '/dashboard'});
 }]);
+
+tripStoryApp.run(function(editableOptions, editableThemes) {
+  editableThemes.bs3.inputClass = 'input-sm';
+  editableThemes.bs3.buttonsClass = 'btn-sm';
+  editableOptions.theme = 'bs3';
+});
 
 tripStoryApp.controller('MainController', ['$rootScope', '$location', 'Backend',
     '$scope', function($rootScope, $location, Backend, $scope) {
