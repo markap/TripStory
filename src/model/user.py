@@ -4,6 +4,7 @@ import hashlib
 import model
 import random
 import validation as val
+from datetime import datetime
 
 
 
@@ -72,6 +73,8 @@ class User:
 
         if user \
             and user.password == hashlib.sha224(payload['password'] + user.salt).hexdigest():
+            user.activeDate = datetime.now()
+            user.put()
             return user
 
         return None

@@ -7,6 +7,7 @@ class User(ndb.Model):
     password = ndb.StringProperty()
     salt = ndb.StringProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
+    activeDate = ndb.DateTimeProperty()
     active = ndb.BooleanProperty(default=True)
 
 
