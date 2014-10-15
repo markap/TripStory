@@ -20,6 +20,9 @@ angular.module('tripStoryApp.story', ['ngRoute'])
         '$sce', '$routeParams', '$timeout', 'FileUploader',
         function($scope, $location, Backend, $rootScope, $sce, $routeParams, $timeout, FileUploader) {
 
+    var maxZIndex = google.maps.Marker.MAX_ZINDEX;
+    $scope.currentZIndex = maxZIndex;
+
 
     var uploader = $scope.uploader = new FileUploader({
         url: '/api/map/image.add',
@@ -248,6 +251,10 @@ angular.module('tripStoryApp.story', ['ngRoute'])
             title: locations[j]['description'],
             id: j
         });
+        if (j === 0) {
+          currentMarker.setZIndex($scope.currentZIndex++);
+        }
+
         bounds.extend(currentMarker.position);
         markers.push(currentMarker);
 
@@ -259,6 +266,7 @@ angular.module('tripStoryApp.story', ['ngRoute'])
                   markers[i].setIcon(inactiveMarkerIcon);
                 }
                 m.setIcon(activeMarkerIcon);
+                m.setZIndex($scope.currentZIndex++);
 
                 $scope.trip['position'] = m.id;
                 $scope.$apply();
@@ -331,6 +339,7 @@ angular.module('tripStoryApp.story', ['ngRoute'])
             markers[i].setIcon(inactiveMarkerIcon);
         }
         markers[$index].setIcon(activeMarkerIcon);
+        markers[$index].setZIndex($scope.currentZIndex++);
 
         $scope.trip['position'] = $index;
     };

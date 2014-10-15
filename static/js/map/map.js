@@ -15,6 +15,10 @@ angular.module('tripStoryApp.map', ['ngRoute'])
         function($scope, $location, Backend, $rootScope, $timeout, FileUploader) {
 
 
+    var maxZIndex = google.maps.Marker.MAX_ZINDEX;
+    $scope.currentZIndex = maxZIndex;
+
+
     var uploader = $scope.uploader = new FileUploader({
         url: '/api/map/upload',
         autoUpload: true
@@ -145,11 +149,21 @@ angular.module('tripStoryApp.map', ['ngRoute'])
 
     $('#pac-input').bind("enterKey",function(e){
         $scope.showSearchBoxResult();
+        return false;
     });
     $('#pac-input').keyup(function(e){
         if(e.keyCode == 13) {
             $(this).trigger("enterKey");
+            return false;
         }
+
+    });
+
+    $(window).keydown(function(event){
+      if(event.keyCode == 13) {
+        event.preventDefault();
+          return false;
+      }
     });
 
 /**
@@ -272,7 +286,8 @@ if (r == true) {
         var fixedMarker = new google.maps.Marker({
           position: $scope.trip.currentMarker.position,
           map: map,
-          icon: activeMarkerIcon
+          icon: activeMarkerIcon,
+          zIndex: $scope.currentZIndex++
         });
         $scope.trip.currentMarker = null;
 
@@ -321,6 +336,7 @@ if (r == true) {
 
             $scope.setMarkersInactive();
             m.setIcon(activeMarkerIcon);
+            m.setZIndex($scope.currentZIndex++);
 
             $scope.trip.currentPosition = newPosition;
             $scope.trip.description = locations[newPosition].description;
@@ -354,6 +370,7 @@ if (r == true) {
         $scope.trip.currentPosition = previousPosition > 0 ? previousPosition -1 : previousPosition;
         $scope.trip.description = locations[$scope.trip.currentPosition]['description'];
         locations[$scope.trip.currentPosition].marker.setIcon(activeMarkerIcon);
+        locations[$scope.trip.currentPosition].marker.setZIndex($scope.currentZIndex++);
 
         // recalulate route
         if (locations.length > 1 && $scope.trip.currentPosition < locations.length-1) {
@@ -379,6 +396,7 @@ if (r == true) {
 
         $scope.setMarkersInactive();
         location['marker'].setIcon(activeMarkerIcon);
+        location['marker'].setZIndex($scope.currentZIndex++);
 
         $scope.trip.currentPosition = $index;
         $scope.trip.description = location.description;
