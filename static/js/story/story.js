@@ -24,6 +24,7 @@ angular.module('tripStoryApp.story', ['ngRoute'])
     $scope.currentZIndex = maxZIndex;
 
 
+
     var uploader = $scope.uploader = new FileUploader({
         url: '/api/map/image.add',
         autoUpload: true
@@ -97,6 +98,54 @@ angular.module('tripStoryApp.story', ['ngRoute'])
         function(err) {
           console.log(err);
         });
+
+
+    } else if ($location.path().indexOf('/landingpage') === 0) {
+       $scope.init = function(type) {
+
+        $rootScope.loggedIn = false;
+        $scope.type = type;
+
+        var story = null;
+
+        if (type === 'random') {
+            var randomStories = [
+                '5066549580791808',
+                '5639445604728832',
+                '5096363633147904',
+                '5659313586569216',
+                '5707702298738688'
+            ];
+
+
+            story = $location.host() === 'localhost'
+                        ? '4537134732017664'
+                        : randomStories[Math.floor(Math.random()*randomStories.length)];
+        } else {
+            story = $location.host() === 'localhost'
+                        ? '4537134732017664'
+                        : '5675267779461120';
+        }
+
+
+
+        Backend.dashboardService().getDetails(story, function(data) {
+
+          $scope.trip = data.trip;
+          $scope.trip.position = 0;
+
+          $scope.isMyStory = false;
+
+          $scope.populateMap(data);
+        },
+        function(err) {
+          console.log(err);
+        });
+
+    };
+
+
+
     } else {
         Backend.dashboardService().getDetails($routeParams.tripId, function(data) {
 
@@ -228,7 +277,8 @@ angular.module('tripStoryApp.story', ['ngRoute'])
       };
 
 
-      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+      var mapName = $scope.type === 'random' ? 'map2' : 'map';
+      var map = new google.maps.Map(document.getElementById(mapName), mapOptions);
 
 
 

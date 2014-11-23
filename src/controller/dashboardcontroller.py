@@ -12,7 +12,7 @@ from src.model import user
 
 class DashboardHandler(basecontroller.BaseHandler):
     @decorator.json_out
-    @decorator.auth
+    #@decorator.auth
     def get(self):
 
         trip_query = trip.Trip.get().fetch()
@@ -37,9 +37,12 @@ class DashboardHandler(basecontroller.BaseHandler):
         }
 
 
+
+
+
 class DetailsHandler(basecontroller.BaseHandler):
     @decorator.json_out
-    @decorator.auth
+    #@decorator.auth
     def post(self):
         payload = json.loads(self.request.body)
 

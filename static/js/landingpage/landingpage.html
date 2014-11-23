@@ -1,0 +1,361 @@
+
+    <div class="jumbotron jumbotron-ad hidden-print">
+      <div class="container">
+        <p><i class="fa fa-flag "></i> TravelStory - Visualize your roadtrips, backpacking and travel experience!</p>
+        <p>Explore more - Sign in and become a beta tester
+            <a href="#register" class="btn btn-danger btn-lg">
+                <i class="fa fa-heart-o"></i>Sign in
+            </a>
+        </p>
+      </div>
+    </div>
+
+
+    <div class="container" ng-controller="StoryController as storyCtr" ng-init="init('fix')">
+        <div class="container">
+                <div>
+
+
+
+                    <h3><i class="fa fa-user"></i><span style="margin-left:5px;"
+                        ng-bind="trip.user.username"></span></h3>
+
+                </div>
+                <p ng-bind="storyCtr.convertToDate(trip.created) | date:'MMMM d, y h:mm a'"></p>
+                <i class="fa fa-share"></i><a href="#share/{{trip.id}}" target="_blank">Share this trip!</a>
+                <span style="margin-left: 20px;" class="fb-share-button"
+                    data-layout="button" data-href="http://travelstory.me/#share/{{trip.id}}"></span>
+            </div>
+            <div class="col-sm-6">
+                <div id="map" ></div>
+                <blockquote>
+
+                    <div>
+                        <button
+                                class="pull-right btn btn-default"
+                                ng-click="textBtnForm.$show()"
+                                ng-hide="textBtnForm.$visible || !storyCtr.isMyStory()">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <p editable-textarea="trip.name"
+                            onaftersave="storyCtr.updateName(trip.name)"
+                            e-rows="4" e-cols="50" e-form="textBtnForm"
+                            ng-bind-html="trip.name" hashtagify></p>
+                    </div>
+
+                </blockquote>
+            </div>
+            <div class="col-sm-6">
+
+            <div ng-show="trip.locations.length > 0" style="margin-bottom: 5px;" class="btn-group">
+                    <button type="button" class="btn btn-default"
+                        ng-bind="storyCtr.navbarIndex($index)"
+                        ng-class="{active:storyCtr.navbarActive($index)}"
+                        ng-click="storyCtr.navbarClick($index)"
+                        ng-repeat="location in trip.locations"></button>
+                </div>
+                <div class="row">
+                  <div ng-repeat="location in trip.locations">
+                    <div  ng-show="storyCtr.showStory($index)">
+                        <div class="left-column">
+
+
+
+                            <button
+                                    class="pull-right btn btn-default"
+                                    ng-click="descBtnForm.$show()"
+                                    ng-hide="descBtnForm.$visible || !storyCtr.isMyStory()">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+
+
+                            <p onaftersave="storyCtr.updateDescription(location.description, $index)"
+                            e-rows="4" e-cols="50" e-form="descBtnForm" editable-textarea="location.description"
+                                class="trip-description"
+                                ng-bind-html="location.description"></p>
+                        </div>
+
+                        <div class="container" style="margin-bottom:5px;" ng-show="storyCtr.isMyStory()">
+                            <input type="file" nv-file-select=""
+                                ng-disabled="storyCtr.disableFileUpload()"
+                                uploader="uploader" multiple  />
+                        </div>
+                        <div ng-hide="location.images[0] || !uploader.isHTML5 || !storyCtr.isMyStory()" class="col-sm-4">
+                            <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                                Image 1
+                            </div>
+                        </div>
+                        <div ng-show="location.images[0]" class="col-sm-4" >
+                                <div class="photo-wrapper">
+                                    <div class="parent-hover photo">
+                                            <a href="{{ storyCtr.showImage(location.images, 0) }}" data-gallery>
+                                        <img
+                                            ng-src="{{ storyCtr.showThumb(location.images, 0) }}"
+                                            class="img-thumbnail">
+                                        </a>
+
+
+                                        <span
+                                            ng-show="storyCtr.isMyStory()"
+                                            ng-click="storyCtr.deleteImage($index, 0)"
+                                            class="child-hover label label-inverse photo-label">
+                                            <button type="form-control button" class="btn btn-black">
+                                            <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                            </button>
+                                        </span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-hide="location.images[1] || !uploader.isHTML5 || !storyCtr.isMyStory()" class="col-sm-4">
+                            <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                                Image 2
+                            </div>
+                        </div>
+                        <div ng-show="location.images[1]" class="col-sm-4" >
+                                <div class="photo-wrapper">
+                                    <div class="parent-hover photo">
+                                            <a href="{{ storyCtr.showImage(location.images, 1) }}" data-gallery>
+                                        <img
+                                            ng-src="{{ storyCtr.showThumb(location.images, 1) }}"
+                                            class="img-thumbnail">
+                                        </a>
+
+
+                                        <span
+                                            ng-show="storyCtr.isMyStory()"
+                                            ng-click="storyCtr.deleteImage($index, 1)"
+                                            class="child-hover label label-inverse photo-label">
+                                            <button type="form-control button" class="btn btn-black">
+                                            <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                            </button>
+                                        </span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-hide="location.images[2] || !uploader.isHTML5 || !storyCtr.isMyStory()" class="col-sm-4">
+                            <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                                Image 3
+                            </div>
+                        </div>
+                        <div ng-show="location.images[2]" class="col-sm-4" >
+                                <div class="photo-wrapper">
+                                    <div class="parent-hover photo">
+                                            <a href="{{ storyCtr.showImage(location.images, 2) }}" data-gallery>
+                                        <img
+                                            ng-src="{{ storyCtr.showThumb(location.images, 2) }}"
+                                            class="img-thumbnail">
+                                        </a>
+
+
+                                        <span
+                                            ng-show="storyCtr.isMyStory()"
+                                            ng-click="storyCtr.deleteImage($index, 2)"
+                                            class="child-hover label label-inverse photo-label">
+                                            <button type="form-control button" class="btn btn-black">
+                                            <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                            </button>
+                                        </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+    </div>
+
+
+
+    <div style="margin-top:10px;" class="jumbotron jumbotron-ad hidden-print">
+      <div class="container">
+        <p><i class="fa fa-globe"></i> Check out our stories all around the earth</p>
+      </div>
+    </div>
+
+    <div class="container">
+
+        <div id="mapMain"></div>
+    </div>
+
+
+
+
+    <div style="margin-top:15px;" class="jumbotron jumbotron-ad hidden-print">
+      <div class="container">
+        <p><i class="fa fa-plane"></i> Another random story for you</p>
+      </div>
+    </div>
+
+
+    <div class="container" ng-controller="StoryController as storyCtr" ng-init="init('random')">
+        <div class="container">
+                <div>
+
+
+
+
+                    <h3><i class="fa fa-user"></i><span style="margin-left:5px;"
+                        ng-bind="trip.user.username"></span></h3>
+
+
+                </div>
+                <p ng-bind="storyCtr.convertToDate(trip.created) | date:'MMMM d, y h:mm a'"></p>
+                <i class="fa fa-share"></i><a href="#share/{{trip.id}}" target="_blank">Share this trip!</a>
+                <span style="margin-left: 20px;" class="fb-share-button"
+                    data-layout="button" data-href="http://travelstory.me/#share/{{trip.id}}"></span>
+            </div>
+            <div class="col-sm-6">
+                <div id="map2" ></div>
+                <blockquote>
+
+                    <div>
+                        <button
+                                class="pull-right btn btn-default"
+                                ng-click="textBtnForm.$show()"
+                                ng-hide="textBtnForm.$visible || !storyCtr.isMyStory()">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <p editable-textarea="trip.name"
+                            onaftersave="storyCtr.updateName(trip.name)"
+                            e-rows="4" e-cols="50" e-form="textBtnForm"
+                            ng-bind-html="trip.name" hashtagify></p>
+                    </div>
+
+                </blockquote>
+            </div>
+            <div class="col-sm-6">
+
+            <div ng-show="trip.locations.length > 0" style="margin-bottom: 5px;" class="btn-group">
+                    <button type="button" class="btn btn-default"
+                        ng-bind="storyCtr.navbarIndex($index)"
+                        ng-class="{active:storyCtr.navbarActive($index)}"
+                        ng-click="storyCtr.navbarClick($index)"
+                        ng-repeat="location in trip.locations"></button>
+                </div>
+                <div class="row">
+                  <div ng-repeat="location in trip.locations">
+                    <div  ng-show="storyCtr.showStory($index)">
+                        <div class="left-column">
+
+
+
+                            <button
+                                    class="pull-right btn btn-default"
+                                    ng-click="descBtnForm.$show()"
+                                    ng-hide="descBtnForm.$visible || !storyCtr.isMyStory()">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+
+
+                            <p onaftersave="storyCtr.updateDescription(location.description, $index)"
+                            e-rows="4" e-cols="50" e-form="descBtnForm" editable-textarea="location.description"
+                                class="trip-description"
+                                ng-bind-html="location.description"></p>
+                        </div>
+
+                        <div class="container" style="margin-bottom:5px;" ng-show="storyCtr.isMyStory()">
+                            <input type="file" nv-file-select=""
+                                ng-disabled="storyCtr.disableFileUpload()"
+                                uploader="uploader" multiple  />
+                        </div>
+                        <div ng-hide="location.images[0] || !uploader.isHTML5 || !storyCtr.isMyStory()" class="col-sm-4">
+                            <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                                Image 1
+                            </div>
+                        </div>
+                        <div ng-show="location.images[0]" class="col-sm-4" >
+                                <div class="photo-wrapper">
+                                    <div class="parent-hover photo">
+                                            <a href="{{ storyCtr.showImage(location.images, 0) }}" data-gallery>
+                                        <img
+                                            ng-src="{{ storyCtr.showThumb(location.images, 0) }}"
+                                            class="img-thumbnail">
+                                        </a>
+
+
+                                        <span
+                                            ng-show="storyCtr.isMyStory()"
+                                            ng-click="storyCtr.deleteImage($index, 0)"
+                                            class="child-hover label label-inverse photo-label">
+                                            <button type="form-control button" class="btn btn-black">
+                                            <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                            </button>
+                                        </span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-hide="location.images[1] || !uploader.isHTML5 || !storyCtr.isMyStory()" class="col-sm-4">
+                            <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                                Image 2
+                            </div>
+                        </div>
+                        <div ng-show="location.images[1]" class="col-sm-4" >
+                                <div class="photo-wrapper">
+                                    <div class="parent-hover photo">
+                                            <a href="{{ storyCtr.showImage(location.images, 1) }}" data-gallery>
+                                        <img
+                                            ng-src="{{ storyCtr.showThumb(location.images, 1) }}"
+                                            class="img-thumbnail">
+                                        </a>
+
+
+                                        <span
+                                            ng-show="storyCtr.isMyStory()"
+                                            ng-click="storyCtr.deleteImage($index, 1)"
+                                            class="child-hover label label-inverse photo-label">
+                                            <button type="form-control button" class="btn btn-black">
+                                            <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                            </button>
+                                        </span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-hide="location.images[2] || !uploader.isHTML5 || !storyCtr.isMyStory()" class="col-sm-4">
+                            <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                                Image 3
+                            </div>
+                        </div>
+                        <div ng-show="location.images[2]" class="col-sm-4" >
+                                <div class="photo-wrapper">
+                                    <div class="parent-hover photo">
+                                            <a href="{{ storyCtr.showImage(location.images, 2) }}" data-gallery>
+                                        <img
+                                            ng-src="{{ storyCtr.showThumb(location.images, 2) }}"
+                                            class="img-thumbnail">
+                                        </a>
+
+
+                                        <span
+                                            ng-show="storyCtr.isMyStory()"
+                                            ng-click="storyCtr.deleteImage($index, 2)"
+                                            class="child-hover label label-inverse photo-label">
+                                            <button type="form-control button" class="btn btn-black">
+                                            <i class="glyphicon glyphicon-remove-circle glyphicon-lg"></i>
+                                            </button>
+                                        </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+    </div>
+
+    <div style="margin-top:15px;" class="jumbotron jumbotron-ad hidden-print">
+      <div class="container">
+        <p><i class="fa fa-plus-circle"></i> We are growing - join us today
+            <a href="#register" class="btn btn-danger btn-lg">
+                <i class="fa fa-heart-o"></i>Sign in
+            </a>
+        </p>
+      </div>
+    </div>

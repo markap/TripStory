@@ -11,4 +11,7 @@ class WebHandler(basecontroller.BaseHandler):
 class WebRedirectHandler(basecontroller.BaseHandler):
 
     def get(self):
-        self.redirect("http://travelstoryme.appspot.com/web/")
+        if self.get_user():
+            self.redirect("http://travelstoryme.appspot.com/web/#dashboard")
+        else:
+            self.redirect("http://travelstoryme.appspot.com/web/#landingpage")

@@ -16,7 +16,8 @@ var tripStoryApp = angular.module('tripStoryApp', [
   'tripStoryApp.explore',
   'tripStoryApp.exploreprofile',
   'tripStoryApp.explorehashtag',
-  'tripStoryApp.story'
+  'tripStoryApp.story',
+  'tripStoryApp.landingPage'
 ]);
 
 tripStoryApp.config(['$routeProvider',
@@ -51,6 +52,7 @@ tripStoryApp.controller('MainController', ['$rootScope', '$location', 'Backend',
       $scope.noLoginNecessary = function(path) {
 
         return path.indexOf('/share') === 0 ||
+            path.indexOf('/landingpage') === 0 ||
             path.indexOf('/register') === 0 ||
             path.indexOf('/login') === 0;
       };
